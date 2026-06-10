@@ -46,3 +46,22 @@ export type signupFormState =
         message?: string
     }
     | undefined
+
+
+// login state
+export const LoginFormSchema = z.object({
+
+    email: z.email({ error: 'Please enter a valid email.' }).trim(),
+    password: z.string({ error: "Invalid!" })
+})
+
+// login form state
+export type loginFormState =
+    | {
+        errors?: {
+            email?: string[]
+            password?: string[]
+        }
+        message?: string
+    }
+    | undefined;
