@@ -44,6 +44,7 @@ export type signupFormState =
             password?: string[]
         }
         message?: string
+        errorMessage?: string
     }
     | undefined
 
@@ -63,5 +64,39 @@ export type loginFormState =
             password?: string[]
         }
         message?: string
+        errorMessage?: string
+    }
+    | undefined;
+
+
+// image uploader
+// Configuration constants for file limits
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+export const CreateCategorySchema = z.object({
+    name: z
+        .string()
+        .min(3, { message: "Category name must be at least 3 characters long." })
+        .trim(),
+
+    desc: z.string(),
+
+    image: z
+        .instanceof(File, { message: "A category image thumbnail is required." })
+
+})
+
+
+export type createCategoryFormState =
+    | {
+        errors?: {
+            name?: string[]
+            desc?: string[]
+            image?: string[]
+        }
+        errorMessage?: string
+        message?: string
+        imageUrl?: string
     }
     | undefined;
