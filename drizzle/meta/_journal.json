@@ -15,6 +15,34 @@
       "when": 1781155203854,
       "tag": "0001_boring_sprite",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781204764216,
+      "tag": "0002_productive_gauntlet",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1781204819374,
+      "tag": "0003_harsh_redwing",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1781207115238,
+      "tag": "0004_funny_sebastian_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1781207421084,
+      "tag": "0005_curly_scream",
+      "breakpoints": true
     }
   ]
 }

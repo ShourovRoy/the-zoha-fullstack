@@ -10,16 +10,19 @@ const CategorySearch = () => {
   const pathname = usePathname()
   const { replace } = useRouter()
 
-  
-  const handleSearch = useDebouncedCallback((term:string) => {
+
+  const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams)
-  
+
+    // remove the page query params while search
+    if (params.get("page")) params.delete("page")
+
     if (term) {
       params.set("categoryName", term)
     } else {
       params.delete('categoryName')
     }
-  
+
     replace(`${pathname}?${params.toString()}`)
 
   }, 300)
@@ -33,7 +36,7 @@ const CategorySearch = () => {
         defaultValue={searchParams.get("categoryName")?.toString()}
         onChange={(e) => {
           handleSearch(e.target.value)
-         
+
         }}
         placeholder="Search catalog categories..."
         className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded text-sm text-neutral-900 bg-white placeholder-neutral-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"

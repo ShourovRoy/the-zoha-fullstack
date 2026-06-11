@@ -1,0 +1,1 @@
+ALTER TABLE "products" ADD COLUMN "image_key" varchar(1100) NOT NULL;

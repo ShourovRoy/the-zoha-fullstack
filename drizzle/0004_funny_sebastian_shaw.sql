@@ -1,0 +1,1 @@
+ALTER TABLE "products" RENAME COLUMN "image_key" TO "featured_image_key";

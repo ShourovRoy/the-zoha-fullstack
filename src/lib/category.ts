@@ -11,21 +11,22 @@ export async function getAllCategories(categoryName?: string, currentPage: numbe
   let offset: number = 0;
 
   if (categoryName) {
+    console.log(categoryName)
     filters.push(ilike(categoryTable.name, categoryName))
   }
 
   if (currentPage > 0) {
-    offset = (currentPage - 1) * 2
+    offset = (currentPage - 1) * 6
   }
 
 
   const [categories, categoriesCount] = await Promise.all([
-    db.select().from(categoryTable).where(and(...filters)).limit(2).offset(offset).orderBy(desc(categoryTable.created_at)),
+    db.select().from(categoryTable).where(and(...filters)).limit(6).offset(offset).orderBy(desc(categoryTable.created_at)),
     db.select({ count: count() }).from(categoryTable).where(and(...filters))
   ])
 
 
-  const totalPages = Math.ceil(Number(categoriesCount[0]?.count) / 2)
+  const totalPages = Math.ceil(Number(categoriesCount[0]?.count) / 6)
   console.log(totalPages)
   return {
     categories,
