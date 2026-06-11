@@ -10,7 +10,6 @@ const CategorySearch = () => {
   const pathname = usePathname()
   const { replace } = useRouter()
 
-
   
   const handleSearch = useDebouncedCallback((term:string) => {
     const params = new URLSearchParams(searchParams)

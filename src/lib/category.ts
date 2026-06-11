@@ -1,18 +1,34 @@
+import 'server-only'
 import { db } from '@/database/db'
 import { categoryTable } from '@/database/schemas/category'
-import { and, ilike, SQL } from 'drizzle-orm'
-import 'server-only'
+import { and, count, desc, ilike, SQL } from 'drizzle-orm'
 
 
-export async function getAllCategories(categoryName?: string, currentPage?: number) {
-    'use cache'
+export async function getAllCategories(categoryName?: string, currentPage: number = 0) {
+  'use cache'
 
-    const filters: SQL[] = []
+  const filters: SQL[] = []
+  let offset: number = 0;
 
-    if (categoryName) {
-        filters.push(ilike(categoryTable.name, categoryName))
-    }
+  if (categoryName) {
+    filters.push(ilike(categoryTable.name, categoryName))
+  }
 
-    const categories = await db.select().from(categoryTable).where(and(...filters))
-    return categories
+  if (currentPage > 0) {
+    offset = (currentPage - 1) * 2
+  }
+
+
+  const [categories, categoriesCount] = await Promise.all([
+    db.select().from(categoryTable).where(and(...filters)).limit(2).offset(offset).orderBy(desc(categoryTable.created_at)),
+    db.select({ count: count() }).from(categoryTable).where(and(...filters))
+  ])
+
+
+  const totalPages = Math.ceil(Number(categoriesCount[0]?.count) / 2)
+  console.log(totalPages)
+  return {
+    categories,
+    totalPages
+  }
 }

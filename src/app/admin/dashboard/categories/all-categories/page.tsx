@@ -3,25 +3,29 @@ import { getAllCategories } from "@/lib/category"
 import Image from "next/image"
 import Link from "next/link"
 import CategorySearch from "./_components/category-search"
+import CategoryPagination from "./_components/category-pagination"
 
 const AllCategories = async ({
   searchParams
 }: {
   searchParams: Promise<{
     categoryName?: string;
-    page?: string; 
+    page?: string;
   }>
 }) => {
 
-  const {categoryName, page} = await searchParams;
+  const { categoryName, page } = await searchParams;
 
-  const currentPage = Number(page) || 1
+  const currentPage = Number(page)
 
 
-  const categories = await getAllCategories(categoryName, currentPage)
+
+
+  const { categories, totalPages } = await getAllCategories(categoryName, currentPage)
 
   return (
     <div className="max-w-7xl mx-auto w-full p-4 sm:p-6">
+
       {/* Page Title Header block */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight text-neutral-900">All Categories</h1>
@@ -34,16 +38,16 @@ const AllCategories = async ({
       {/* Grid Layout Container */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {categories.map((category, index) => (
-          <div 
+          <div
             key={category.id || index}
             className="bg-white border border-neutral-200 rounded-md overflow-hidden flex flex-col justify-between shadow-xs hover:shadow-md transition-shadow"
           >
             {/* Aspect Ratio S3 Image Box */}
             <div className="w-full h-48 bg-stone-50 relative border-b border-neutral-100 flex items-center justify-center overflow-hidden">
-              <Image 
-                width={300} 
-                height={300} 
-                src={`${s3Domain}/${category.imageKey}`} 
+              <Image
+                width={300}
+                height={300}
+                src={`${s3Domain}/${category.imageKey}`}
                 alt={category.name}
                 className="w-full h-full object-cover"
                 priority={index < 3} // Optimizes loading speeds for the first few layout elements
@@ -60,8 +64,8 @@ const AllCategories = async ({
               </div>
 
               {/* Action Call to Action Link button */}
-              <Link 
-                href={`/admin/dashboard/categories/${category.id}`} 
+              <Link
+                href={`/admin/dashboard/categories/${category.id}`}
                 className="w-full py-2 bg-stone-50 hover:bg-amber-50 border border-neutral-200 hover:border-amber-300 text-neutral-700 hover:text-amber-900 text-xs font-medium rounded text-center block transition-colors"
               >
                 Show Related Products
@@ -69,7 +73,9 @@ const AllCategories = async ({
             </div>
           </div>
         ))}
+
       </div>
+        <CategoryPagination totalPages={totalPages} />
     </div>
   )
 }
