@@ -5,6 +5,7 @@ import {
 
 
 export const bucketName: string = process.env.S3_BUCKET_NAME || ""
+export const s3Domain: string = process.env.S3_MEDIA_DOMAIN || ""
 
 export const mediaClient = new S3Client({
   region: process.env.S3_BUCKET_REGION || "",

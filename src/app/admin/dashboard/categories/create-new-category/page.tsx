@@ -1,4 +1,4 @@
-import CreateCategoryForm from "@/app/admin/_components/create-category-form"
+import CreateCategoryForm from "@/components/admin/create-category-form"
 
 const CreateNewCategoryPage = () => {
   return (

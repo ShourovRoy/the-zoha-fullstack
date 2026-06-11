@@ -6,6 +6,7 @@ import { bucketName, mediaClient } from "@/config/media-client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { db } from "@/database/db";
 import { categoryTable } from "@/database/schemas/category";
+import { revalidatePath } from "next/cache";
 
 
 export async function uploadImageToPresignedUrl(formState: createCategoryFormState, formData: FormData) {
@@ -16,6 +17,7 @@ export async function uploadImageToPresignedUrl(formState: createCategoryFormSta
         desc: formData.get("desc"),
         image: formData.get("image"),
     })
+
 
     // 2. Return flat errors grouped by input field if validation fails
     if (!validatedFields.success) {
@@ -36,7 +38,7 @@ export async function uploadImageToPresignedUrl(formState: createCategoryFormSta
     const timestamp = Date.now()
     const cleanFileName = image.name.replace(/[^a-zA-Z0-9.]/g, "_")
     const s3Key = `categories/${timestamp}-${cleanFileName}`
-    console.log(bucketName)
+
 
     // 3. Upload directly using the AWS SDK client
     try {
@@ -59,6 +61,9 @@ export async function uploadImageToPresignedUrl(formState: createCategoryFormSta
             id: categoryTable.id,
             name: categoryTable.name
         })
+
+        // revalidate category cache
+        revalidatePath('/admin/dashboard/categories/all-categories')
 
         return {
             message: `${createdCategoryRes[0].name} category has been created!`
