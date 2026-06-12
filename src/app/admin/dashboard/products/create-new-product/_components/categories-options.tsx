@@ -1,6 +1,6 @@
 'use server'
 
-import { getAllCategories } from "@/lib/category"
+import { getAllCategories } from "@/lib/data/category-data"
 
 export const CategoriesOptions = async () => {
     const { categories } = await getAllCategories()

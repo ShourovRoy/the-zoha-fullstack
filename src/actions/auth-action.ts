@@ -2,11 +2,11 @@
 
 
 import bcrypt from "bcryptjs";
-import { LoginFormSchema, loginFormState, SignupFormSchema, signupFormState } from "../lib/definitions";
+import { LoginFormSchema, loginFormState, SignupFormSchema, signupFormState } from "../lib/types/definitions";
 import * as z from "zod"
 import { db } from "@/database/db";
 import { usersTable } from "@/database/schemas/user";
-import { createSession, deleteSession } from "@/lib/session";
+import { createSession, deleteSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { eq, or } from "drizzle-orm";
 

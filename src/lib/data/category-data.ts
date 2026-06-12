@@ -2,10 +2,14 @@ import 'server-only'
 import { db } from '@/database/db'
 import { categoryTable } from '@/database/schemas/category'
 import { and, count, desc, ilike, SQL } from 'drizzle-orm'
+import { cacheLife, cacheTag } from 'next/cache'
 
 
 export async function getAllCategories(categoryName?: string, currentPage: number = 0) {
   'use cache'
+
+  cacheTag("allCategories")
+  cacheLife("hours")
 
   const filters: SQL[] = []
   let offset: number = 0;

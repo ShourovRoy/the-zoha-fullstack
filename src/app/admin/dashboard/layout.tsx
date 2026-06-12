@@ -25,7 +25,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         { label: "Create Category", href: "/admin/dashboard/categories/create-new-category/", icon: FolderPlus },
         { label: "All Categories", href: "/admin/dashboard/categories/all-categories/", icon: Layers },
         { label: "Upload Product", href: "/admin/dashboard/products/create-new-product/", icon: UploadCloud },
-        { label: "Product Inventory", href: "/admin/dashboard/inventory", icon: Boxes },
+        { label: "Product Inventory", href: "/admin/dashboard/products/inventory/", icon: Boxes },
         { label: "Available Orders", href: "/admin/dashboard/available-orders", icon: ShoppingBag, count: 5 },
         { label: "Order In Process", href: "/admin/dashboard/processing-orders", icon: Truck, count: 2 },
         { label: "Completed Orders", href: "/admin/dashboard/completed-orders", icon: CheckCircle2 },

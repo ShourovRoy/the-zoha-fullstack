@@ -1,6 +1,6 @@
 'use client'
 
-import { signup } from '@/actions/auth'
+import { signup } from '@/actions/auth-action'
 import { useActionState, useState, useEffect } from 'react'
 
 const SignupForm = () => {

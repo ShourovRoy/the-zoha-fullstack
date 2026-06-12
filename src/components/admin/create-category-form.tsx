@@ -1,11 +1,11 @@
 'use client'
 
-import { uploadImageToPresignedUrl } from "@/actions/admin/media-uploader"
+import { createCategory } from "@/actions/admin/create-category-action"
 import { FolderPlus, Image as ImageIcon, UploadCloud, Loader2, AlertTriangle, CheckCircle } from "lucide-react"
 import { useActionState, useState, useEffect } from "react"
 
 const CreateCategoryForm = () => {
-    const [categoryState, categoryAction, categoryPending] = useActionState(uploadImageToPresignedUrl, undefined)
+    const [categoryState, categoryAction, categoryPending] = useActionState(createCategory, undefined)
     const [imagePreview, setImagePreview] = useState<string | null>(null)
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,7 +19,7 @@ const CreateCategoryForm = () => {
     useEffect(() => {
         if (categoryState?.success) {
             setImagePreview(null)
-            
+
         }
     }, [categoryState])
 

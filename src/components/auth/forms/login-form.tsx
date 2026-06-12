@@ -1,7 +1,7 @@
 'use client'
 
-import { login } from "@/actions/auth"
-import { loginFormState } from "@/lib/definitions"
+import { login } from "@/actions/auth-action"
+import { loginFormState } from "@/lib/types/definitions"
 
 import { Eye, EyeOff } from "lucide-react"
 import { useActionState, useState } from "react"

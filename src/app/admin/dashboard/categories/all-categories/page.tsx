@@ -1,5 +1,5 @@
 import { s3Domain } from "@/config/media-client"
-import { getAllCategories } from "@/lib/category"
+import { getAllCategories } from "@/lib/data/category-data"
 import Image from "next/image"
 import Link from "next/link"
 import CategorySearch from "./_components/category-search"
@@ -75,7 +75,7 @@ const AllCategories = async ({
         ))}
 
       </div>
-        <CategoryPagination totalPages={totalPages} />
+      <CategoryPagination totalPages={totalPages} />
     </div>
   )
 }

@@ -2,6 +2,8 @@
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
 
+
+
 export const categoryTable = pgTable("categories", {
     id: uuid("id").defaultRandom().primaryKey(),
     name: varchar("name", {
@@ -15,3 +17,5 @@ export const categoryTable = pgTable("categories", {
     }).notNull().unique(),
     ...timestamps,
 })
+
+

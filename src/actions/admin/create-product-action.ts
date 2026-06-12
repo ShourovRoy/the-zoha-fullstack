@@ -1,10 +1,11 @@
 'use server'
 import * as z from "zod"
-import { createProductFormState, CreateProductSchema } from "@/lib/definitions";
+import { createProductFormState, CreateProductSchema } from "@/lib/types/definitions";
 import { bucketName, mediaClient } from "@/config/media-client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { productImageTable, productTable } from "@/database/schemas/product";
 import { db } from "@/database/db";
+import { updateTag } from "next/cache";
 
 export interface ImageGallaryInterface {
     imageKey: string
@@ -124,6 +125,9 @@ export async function createProduct(formState: createProductFormState, formData:
 
 
         await db.insert(productImageTable).values(productGallaryDataList)
+
+
+        updateTag('productInventory')
 
 
         return {

@@ -1,6 +1,6 @@
 import { decimal, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
-import { categoryTable } from "./category";
 import { timestamps } from "../helpers/columns.helpers";
+import { categoryTable } from "./category";
 
 export const productTable = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -29,3 +29,4 @@ export const productImageTable = pgTable("productImages", {
   productId: uuid("product_id").references(() => productTable.id),
   ...timestamps,
 })
+

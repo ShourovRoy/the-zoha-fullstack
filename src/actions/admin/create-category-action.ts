@@ -1,15 +1,15 @@
 'use server'
 
 import * as z from "zod"
-import { createCategoryFormState, CreateCategorySchema } from "@/lib/definitions";
+import { createCategoryFormState, CreateCategorySchema } from "@/lib/types/definitions";
 import { bucketName, mediaClient } from "@/config/media-client";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { db } from "@/database/db";
 import { categoryTable } from "@/database/schemas/category";
-import { revalidatePath } from "next/cache";
+import { updateTag } from "next/cache";
 
 
-export async function uploadImageToPresignedUrl(formState: createCategoryFormState, formData: FormData) {
+export async function createCategory(formState: createCategoryFormState, formData: FormData) {
 
     // 1. Validate fields using the unified Zod schema
     const validatedFields = CreateCategorySchema.safeParse({
@@ -62,8 +62,9 @@ export async function uploadImageToPresignedUrl(formState: createCategoryFormSta
             name: categoryTable.name
         })
 
-        // revalidate category cache
-        revalidatePath('/admin/dashboard/categories/all-categories')
+        // update category cache
+
+        updateTag("allCategories")
 
         return {
             message: `${createdCategoryRes[0].name} category has been created!`
