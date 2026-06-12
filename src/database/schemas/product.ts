@@ -1,4 +1,4 @@
-import { decimal, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { decimal, integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
 import { categoryTable } from "./category";
 
@@ -11,6 +11,8 @@ export const productTable = pgTable("products", {
     length: 500,
   }).notNull(),
   price: decimal().notNull().default("0.00"),
+  quantity: integer("quantity").default(1).notNull(),
+  thresholdQuantity: integer("threshold_quantity").default(1),
   desc: varchar("desc", {
     length: 800
   }),

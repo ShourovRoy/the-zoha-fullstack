@@ -38,6 +38,8 @@ export async function createProduct(formState: createProductFormState, formData:
         shortDesc: formData.get("shortDesc"),
         price: Number(formData.get("price")),
         desc: formData.get("desc"),
+        quantity: Number(formData.get("quantity")),
+        thresholdQuantity: Number(formData.get("thresholdQuantity")),
         categoryId: formData.get("categoryId"),
         featuredImageKey: formData.get("featuredImageKey"), // Make sure this matches your input's "name" attribute!
         gallaryImages: formData.getAll("galleryImages"), // Gets ALL files from the multiple upload block as an array
@@ -53,7 +55,7 @@ export async function createProduct(formState: createProductFormState, formData:
     }
 
     // 3. Database operations go here...
-    const { featuredImageKey, categoryId, desc, name, shortDesc, gallaryImages, price } = validatedFields.data
+    const { featuredImageKey, categoryId, desc, name, shortDesc, gallaryImages, price, quantity, thresholdQuantity } = validatedFields.data
 
 
     // convert featured image to buffer
@@ -74,7 +76,7 @@ export async function createProduct(formState: createProductFormState, formData:
 
         // prepare db product data
         const productValue: typeof productTable.$inferInsert = {
-            name, featuredImageKey: featuredImageS3Key, shortDesc, categoryId, desc, price: price.toString()
+            name, featuredImageKey: featuredImageS3Key, shortDesc, categoryId, desc, price: price.toString(), quantity, thresholdQuantity
         }
 
         // save product in db

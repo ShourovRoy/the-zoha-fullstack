@@ -105,9 +105,11 @@ export type createCategoryFormState =
 export const CreateProductSchema = z.object({
     name: z.string().min(1, "Product name is required"),
     shortDesc: z.string().min(1, "Short summary is required"),
-    price: z.coerce.number({ error: "Price must be a valid number" }).positive("Price must be greater than zero"),
+    price: z.coerce.number({ error: "Price must be a valid number" }).positive({ error: "Price must be greater than zero" }),
     desc: z.string().min(1, "Full description is required"),
     categoryId: z.string().min(1, "Please select a department category"),
+    quantity: z.coerce.number({ error: "Quantity must be a valid number" }).min(1).positive({ error: "Can not be negative number" }),
+    thresholdQuantity: z.coerce.number({ error: "Threshold Quantity must be a valid number" }).min(1).positive({ error: "Can not be negative number" }),
 
     // Single file check for the main showcase banner
     featuredImageKey: z.instanceof(File, { message: "A featured preview image asset is required." }),
@@ -123,9 +125,11 @@ export type createProductFormState =
             shortDesc?: string[]
             price?: string[]
             desc?: string[]
-            categoryId?: string[]       // Changed from string to string[]
-            featuredImageKey?: string[] // Changed from string to string[]
-            gallaryImages?: string[]    // Changed from string to string[]
+            quantity?: string[]
+            thresholdQuantity?: string[]
+            categoryId?: string[]       
+            featuredImageKey?: string[] 
+            gallaryImages?: string[]   
         }
         errorMessage?: string
         message?: string

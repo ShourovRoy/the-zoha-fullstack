@@ -1,26 +1,43 @@
 {
-  "id": "c3f05db2-7d95-4a0d-8f05-4e8bea5708f7",
-  "prevIds": [
-    "33d53088-6aac-4399-a16d-778028edca28"
-  ],
   "version": "8",
   "dialect": "postgres",
+  "id": "915e780d-bf7f-4c72-b2ff-7da905a88d98",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
   "ddl": [
+    {
+      "values": [
+        "admin",
+        "customer"
+      ],
+      "name": "user_role",
+      "entityType": "enums",
+      "schema": "public"
+    },
     {
       "isRlsEnabled": false,
       "name": "categories",
-      "schema": "public",
-      "entityType": "tables"
+      "entityType": "tables",
+      "schema": "public"
     },
     {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "categories_pkey",
-      "schema": "public",
-      "table": "categories",
-      "entityType": "pks"
+      "isRlsEnabled": false,
+      "name": "productImages",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "products",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "users",
+      "entityType": "tables",
+      "schema": "public"
     },
     {
       "type": "uuid",
@@ -31,9 +48,9 @@
       "generated": null,
       "identity": null,
       "name": "id",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
+      "table": "categories"
     },
     {
       "type": "varchar(100)",
@@ -44,9 +61,9 @@
       "generated": null,
       "identity": null,
       "name": "name",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
+      "table": "categories"
     },
     {
       "type": "varchar(255)",
@@ -57,9 +74,9 @@
       "generated": null,
       "identity": null,
       "name": "desc",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
+      "table": "categories"
     },
     {
       "type": "varchar(600)",
@@ -70,9 +87,9 @@
       "generated": null,
       "identity": null,
       "name": "image_key",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
+      "table": "categories"
     },
     {
       "type": "timestamp",
@@ -83,9 +100,9 @@
       "generated": null,
       "identity": null,
       "name": "updated_at",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
+      "table": "categories"
     },
     {
       "type": "timestamp",
@@ -96,36 +113,9 @@
       "generated": null,
       "identity": null,
       "name": "created_at",
+      "entityType": "columns",
       "schema": "public",
-      "table": "categories",
-      "entityType": "columns"
-    },
-    {
-      "nameExplicit": false,
-      "columns": [
-        "image_key"
-      ],
-      "nullsNotDistinct": false,
-      "name": "categories_image_key_unique",
-      "schema": "public",
-      "table": "categories",
-      "entityType": "uniques"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "productImages",
-      "schema": "public",
-      "entityType": "tables"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "productImages_pkey",
-      "schema": "public",
-      "table": "productImages",
-      "entityType": "pks"
+      "table": "categories"
     },
     {
       "type": "uuid",
@@ -136,9 +126,9 @@
       "generated": null,
       "identity": null,
       "name": "id",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
       "type": "varchar(1000)",
@@ -149,9 +139,9 @@
       "generated": null,
       "identity": null,
       "name": "image_key",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
       "type": "uuid",
@@ -162,9 +152,9 @@
       "generated": null,
       "identity": null,
       "name": "product_id",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
       "type": "timestamp",
@@ -175,9 +165,9 @@
       "generated": null,
       "identity": null,
       "name": "updated_at",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
       "type": "timestamp",
@@ -188,20 +178,295 @@
       "generated": null,
       "identity": null,
       "name": "created_at",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
-      "nameExplicit": false,
-      "columns": [
-        "image_key"
-      ],
-      "nullsNotDistinct": false,
-      "name": "productImages_image_key_unique",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "uniques"
+      "table": "products"
+    },
+    {
+      "type": "varchar(355)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "varchar(500)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "short_desc",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "numeric",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'0.00'",
+      "generated": null,
+      "identity": null,
+      "name": "price",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "1",
+      "generated": null,
+      "identity": null,
+      "name": "quantity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": "1",
+      "generated": null,
+      "identity": null,
+      "name": "threshold_quantity",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "varchar(800)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "desc",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "varchar(1100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "featured_image_key",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "category_id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "products"
+    },
+    {
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "first_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(100)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "last_name",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(255)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "email",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "varchar(20)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "phone_number",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "password",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "user_role",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'customer'",
+      "generated": null,
+      "identity": null,
+      "name": "role",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "false",
+      "generated": null,
+      "identity": null,
+      "name": "is_email_verified",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "default_shipping_address",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "users"
     },
     {
       "nameExplicit": false,
@@ -215,143 +480,10 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
-      "name": "productImages_product_id_products_id_fk",
+      "name": "productImages_product_id_products_id_fkey",
+      "entityType": "fks",
       "schema": "public",
-      "table": "productImages",
-      "entityType": "fks"
-    },
-    {
-      "isRlsEnabled": false,
-      "name": "products",
-      "schema": "public",
-      "entityType": "tables"
-    },
-    {
-      "columns": [
-        "id"
-      ],
-      "nameExplicit": false,
-      "name": "products_pkey",
-      "schema": "public",
-      "table": "products",
-      "entityType": "pks"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(355)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "name",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(500)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "short_desc",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "numeric",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'0.00'",
-      "generated": null,
-      "identity": null,
-      "name": "price",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(800)",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "desc",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(1100)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "featured_image_key",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "category_id",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "schema": "public",
-      "table": "products",
-      "entityType": "columns"
+      "table": "productImages"
     },
     {
       "nameExplicit": false,
@@ -365,16 +497,40 @@
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "NO ACTION",
-      "name": "products_category_id_categories_id_fk",
+      "name": "products_category_id_categories_id_fkey",
+      "entityType": "fks",
       "schema": "public",
-      "table": "products",
-      "entityType": "fks"
+      "table": "products"
     },
     {
-      "isRlsEnabled": false,
-      "name": "users",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "categories_pkey",
       "schema": "public",
-      "entityType": "tables"
+      "table": "categories",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "productImages_pkey",
+      "schema": "public",
+      "table": "productImages",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "products_pkey",
+      "schema": "public",
+      "table": "products",
+      "entityType": "pks"
     },
     {
       "columns": [
@@ -387,147 +543,26 @@
       "entityType": "pks"
     },
     {
-      "type": "uuid",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "gen_random_uuid()",
-      "generated": null,
-      "identity": null,
-      "name": "id",
+      "nameExplicit": false,
+      "columns": [
+        "image_key"
+      ],
+      "nullsNotDistinct": false,
+      "name": "categories_image_key_key",
       "schema": "public",
-      "table": "users",
-      "entityType": "columns"
+      "table": "categories",
+      "entityType": "uniques"
     },
     {
-      "type": "varchar(100)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "first_name",
+      "nameExplicit": false,
+      "columns": [
+        "image_key"
+      ],
+      "nullsNotDistinct": false,
+      "name": "productImages_image_key_key",
       "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(100)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "last_name",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(255)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "email",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "varchar(20)",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "phone_number",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "password",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "user_role",
-      "typeSchema": "public",
-      "notNull": true,
-      "dimensions": 0,
-      "default": "'customer'",
-      "generated": null,
-      "identity": null,
-      "name": "role",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "boolean",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "false",
-      "generated": null,
-      "identity": null,
-      "name": "is_email_verified",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "text",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "default_shipping_address",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "updated_at",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
-    },
-    {
-      "type": "timestamp",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": "now()",
-      "generated": null,
-      "identity": null,
-      "name": "created_at",
-      "schema": "public",
-      "table": "users",
-      "entityType": "columns"
+      "table": "productImages",
+      "entityType": "uniques"
     },
     {
       "nameExplicit": false,
@@ -535,7 +570,7 @@
         "email"
       ],
       "nullsNotDistinct": false,
-      "name": "users_email_unique",
+      "name": "users_email_key",
       "schema": "public",
       "table": "users",
       "entityType": "uniques"
@@ -546,19 +581,10 @@
         "phone_number"
       ],
       "nullsNotDistinct": false,
-      "name": "users_phone_number_unique",
+      "name": "users_phone_number_key",
       "schema": "public",
       "table": "users",
       "entityType": "uniques"
-    },
-    {
-      "values": [
-        "admin",
-        "customer"
-      ],
-      "name": "user_role",
-      "schema": "public",
-      "entityType": "enums"
     }
   ],
   "renames": []
