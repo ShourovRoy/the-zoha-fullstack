@@ -77,13 +77,13 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 export const CreateCategorySchema = z.object({
     name: z
         .string()
-        .min(3, { message: "Category name must be at least 3 characters long." })
+        .min(3, { error: "Category name must be at least 3 characters long." })
         .trim(),
 
     desc: z.string(),
 
     image: z
-        .instanceof(File, { message: "A category image thumbnail is required." })
+        .instanceof(File, { error: "A category image thumbnail is required." })
 
 })
 
@@ -98,5 +98,36 @@ export type createCategoryFormState =
         errorMessage?: string
         message?: string
         imageUrl?: string
+    }
+    | undefined;
+
+
+export const CreateProductSchema = z.object({
+    name: z.string().min(1, "Product name is required"),
+    shortDesc: z.string().min(1, "Short summary is required"),
+    price: z.coerce.number({ error: "Price must be a valid number" }).positive("Price must be greater than zero"),
+    desc: z.string().min(1, "Full description is required"),
+    categoryId: z.string().min(1, "Please select a department category"),
+
+    // Single file check for the main showcase banner
+    featuredImageKey: z.instanceof(File, { message: "A featured preview image asset is required." }),
+
+    // Array of files check for the multi-image gallery grid tracking
+    gallaryImages: z.array(z.instanceof(File)).min(1, "At least one gallery view image is required.")
+})
+
+export type createProductFormState =
+    | {
+        errors?: {
+            name?: string[]
+            shortDesc?: string[]
+            price?: string[]
+            desc?: string[]
+            categoryId?: string[]       // Changed from string to string[]
+            featuredImageKey?: string[] // Changed from string to string[]
+            gallaryImages?: string[]    // Changed from string to string[]
+        }
+        errorMessage?: string
+        message?: string
     }
     | undefined;
