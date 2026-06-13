@@ -1,6 +1,7 @@
 
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
+import { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 
 
@@ -18,4 +19,8 @@ export const categoryTable = pgTable("categories", {
     ...timestamps,
 })
 
+// Type for selecting data (read operations)
+export type Category = InferSelectModel<typeof categoryTable>;
 
+// Type for inserting data (write operations)
+export type NewCategory = InferInsertModel<typeof categoryTable>;

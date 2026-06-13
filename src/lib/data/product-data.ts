@@ -1,11 +1,11 @@
 import { db } from '@/database/db'
 import { productTable } from '@/database/schemas/product'
-import { and, count, ilike, SQL } from 'drizzle-orm'
+import { and, count, eq, ilike, SQL } from 'drizzle-orm'
 import { cacheLife, cacheTag } from 'next/cache'
 import 'server-only'
 
 
-export async function getAllProducts(productName?: string, currentPage: number = 0) {
+export async function getAllProducts(productName?: string, currentPage: number = 0, categoryId?: string) {
     "use cache"
     cacheTag("productInventory")
 
@@ -18,8 +18,14 @@ export async function getAllProducts(productName?: string, currentPage: number =
         filtes.push(ilike(productTable.name, productName))
     }
 
+    if (categoryId) {
+        filtes.push(eq(productTable.categoryId, categoryId))
+    }
+
+
+
     if (currentPage > 0) {
-        offset = (currentPage - 1) * 5
+        offset = (currentPage - 1) * 6
     }
 
     const [products, totalProductsCount] = await Promise.all([
@@ -31,10 +37,13 @@ export async function getAllProducts(productName?: string, currentPage: number =
             where: {
                 name: productName ? {
                     ilike: `%${productName}%`
-                } : undefined
+                } : undefined,
+                categoryId: categoryId ? {
+                    eq: categoryId
+                } : undefined,
             },
             offset: offset,
-            limit: 5,
+            limit: 6,
             orderBy: {
                 created_at: "desc"
             }
@@ -42,7 +51,7 @@ export async function getAllProducts(productName?: string, currentPage: number =
         db.select({ count: count() }).from(productTable).where(and(...filtes))
     ])
 
-    const totalPages = Math.ceil(Number(totalProductsCount[0].count) / 5)
+    const totalPages = Math.ceil(Number(totalProductsCount[0].count) / 6)
 
 
 
