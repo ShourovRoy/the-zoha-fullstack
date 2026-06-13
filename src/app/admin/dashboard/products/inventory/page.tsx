@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Package, Folder, Layers, Pencil, PlusCircle, AlertCircle, Eye } from "lucide-react"
 import InventorySearch from "./_components/inventory-search"
+import InventoryPagination from "./_components/inventory-pagination"
 
 const getAssetUrl = (key: string) => {
     if (key.startsWith('http')) return key;
@@ -17,8 +18,8 @@ const InventoryPage = async ({
         page?: number;
     }>
 }) => {
-    const { productName } = await searchParams;
-    const { products } = await getAllProducts(productName)
+    const { productName, page } = await searchParams;
+    const { products, totalPages } = await getAllProducts(productName, page)
 
     const hasProducts = products && products.length > 0
 
@@ -215,6 +216,10 @@ const InventoryPage = async ({
                             </tbody>
                         </table>
                     </div>
+
+
+                    {/* pagination */}
+                    <InventoryPagination totalPages={totalPages} />
                 </div>
             )}
         </div>

@@ -1,8 +1,9 @@
-import { ReactNode } from 'react'
 
-const loading = ({ children }: { children: ReactNode }) => {
+const loading = () => {
     return (
-        <div>{children}</div>
+        <div>
+            Loading Inventory
+        </div>
     )
 }
 
