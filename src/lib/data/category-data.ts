@@ -31,7 +31,7 @@ export async function getAllCategories(categoryName?: string, currentPage: numbe
 
 
   const totalPages = Math.ceil(Number(categoriesCount[0]?.count) / 6)
-  console.log(totalPages)
+  console.log(categoriesCount)
   return {
     categories,
     totalPages
