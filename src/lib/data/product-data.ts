@@ -1,11 +1,11 @@
 import { db } from '@/database/db'
 import { productTable } from '@/database/schemas/product'
-import { and, count, eq, ilike, SQL } from 'drizzle-orm'
+import { and, count, eq, gt, gte, ilike, lt, lte, sql, SQL } from 'drizzle-orm'
 import { cacheLife, cacheTag } from 'next/cache'
 import 'server-only'
 
 
-export async function getAllProducts(productName?: string, currentPage: number = 0, categoryId?: string) {
+export async function getAllProducts(productName?: string, currentPage: number = 0, categoryId?: string, minPrice?: number, maxPrice?: number) {
     "use cache"
     cacheTag("productInventory")
 
@@ -21,6 +21,15 @@ export async function getAllProducts(productName?: string, currentPage: number =
     if (categoryId) {
         filtes.push(eq(productTable.categoryId, categoryId))
     }
+
+    if (minPrice) {
+        filtes.push(gte(productTable.price, String(minPrice)))
+    }
+
+    if (maxPrice) {
+        filtes.push(lte(productTable.price, String(maxPrice)))
+    }
+
 
 
 
@@ -41,6 +50,10 @@ export async function getAllProducts(productName?: string, currentPage: number =
                 categoryId: categoryId ? {
                     eq: categoryId
                 } : undefined,
+                price: {
+                    gte: minPrice ? String(minPrice) : undefined,
+                    lte: maxPrice ? String(maxPrice) : undefined
+                }
             },
             offset: offset,
             limit: 6,
@@ -60,4 +73,26 @@ export async function getAllProducts(productName?: string, currentPage: number =
         products,
         totalPages
     }
+}
+
+
+//  get max and min price of products
+export async function getProductPriceBoundaries() {
+  try {
+    const [result] = await db
+      .select({
+        // sql<number>`...` tells TypeScript to expect a numeric return value
+        lowestPrice: sql<number>`cast(min(${productTable.price}) as float)`,
+        highestPrice: sql<number>`cast(max(${productTable.price}) as float)`,
+      })
+      .from(productTable);
+
+    return {
+      minPrice: result?.lowestPrice ?? 0,
+      maxPrice: result?.highestPrice ?? 100, // Safe design system fallback
+    };
+  } catch (error) {
+    console.error("Failed to fetch price boundaries:", error);
+    return { minPrice: 0, maxPrice: 100 };
+  }
 }

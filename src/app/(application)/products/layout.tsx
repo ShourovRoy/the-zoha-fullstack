@@ -1,5 +1,6 @@
 import { ReactNode, Suspense } from "react"
-import ProductCategoriesOptionFilter from "./_components/product-categories-option-filter"
+import ProductCategoriesOptionFilter from "./_components/filters/product-categories-option-filter"
+import ProductFilterPriceRange from "./_components/filters/product-filter-price-range"
 
 export default function ProductsLayout({ children }: { children: ReactNode }) {
     return (
@@ -33,6 +34,8 @@ export default function ProductsLayout({ children }: { children: ReactNode }) {
                                 </div>
                             }>
                                 <ProductCategoriesOptionFilter />
+
+                                <ProductFilterPriceRange />
                             </Suspense>
                         </div>
                     </aside>

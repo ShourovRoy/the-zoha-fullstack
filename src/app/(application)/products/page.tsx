@@ -16,14 +16,16 @@ interface PageProps {
         productName?: string;
         page?: number;
         categoryId?: string;
+        minPrice?: number;
+        maxPrice?: number;
     }>
 }
 
 const ProductsPage = async ({ searchParams }: PageProps) => {
-    const { productName, page, categoryId } = await searchParams
+    const { productName, page, categoryId, minPrice, maxPrice } = await searchParams
     const currentPage = Number(page) || 1
 
-    const { products, totalPages } = await getAllProducts(productName, currentPage, categoryId)
+    const { products, totalPages } = await getAllProducts(productName, currentPage, categoryId, minPrice, maxPrice)
     const hasProducts = products && products.length > 0
 
     return (
@@ -56,9 +58,12 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                     {/* Clean Cards: Floating cleanly via soft shadow with no wrapper lines */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         {products.map((product) => {
-                            const formattedPrice = new Intl.NumberFormat('en-US', {
+                            // Formatted for Bangladeshi Taka standard presentation (Whole numbers)
+                            const formattedPrice = new Intl.NumberFormat('en', {
                                 style: 'currency',
-                                currency: 'USD',
+                                currency: 'BDT',
+                                currencyDisplay: 'symbol',
+                                minimumFractionDigits: 2,
                             }).format(parseFloat(product.price))
 
                             const isOutOfStock = (product.quantity ?? 0) <= 0
@@ -80,7 +85,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                                         {isOutOfStock && (
                                             <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
                                                 <span className="text-[10px] font-bold text-neutral-900 bg-white px-2.5 py-1 rounded shadow-xs uppercase tracking-wider">
-                                                    Out of stock
+                                                    স্টক শেষ
                                                 </span>
                                             </div>
                                         )}
