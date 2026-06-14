@@ -6,6 +6,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { productImageTable, productTable } from "@/database/schemas/product";
 import { db } from "@/database/db";
 import { updateTag } from "next/cache";
+import slugify from "slugify";
 
 export interface ImageGallaryInterface {
     imageKey: string
@@ -74,9 +75,16 @@ export async function createProduct(formState: createProductFormState, formData:
             ContentType: featuredImageKey.type || "application/octet-stream",
         }))
 
+        // slug
+        const slug = slugify(`${name}-${Date.now()}`, {
+            lower: true,
+            trim: true,
+            strict: true
+        })
+
         // prepare db product data
         const productValue: typeof productTable.$inferInsert = {
-            name, featuredImageKey: featuredImageS3Key, shortDesc, categoryId, desc, price: price.toString(), quantity, thresholdQuantity
+            name, featuredImageKey: featuredImageS3Key, shortDesc, categoryId, desc, price: price.toString(), quantity, thresholdQuantity, slug
         }
 
         // save product in db

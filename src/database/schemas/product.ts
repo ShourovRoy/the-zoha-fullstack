@@ -1,4 +1,4 @@
-import { decimal, integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { decimal, integer, pgTable, uuid, varchar, boolean } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
 import { categoryTable } from "./category";
 
@@ -19,6 +19,10 @@ export const productTable = pgTable("products", {
   featuredImageKey: varchar("featured_image_key", {
     length: 1100
   }).notNull(),
+  slug: varchar("slug", {
+    length: 2000
+  }).unique(),
+  isFeatured: boolean("is_featured").default(false),
   categoryId: uuid("category_id").references(() => categoryTable.id),
   ...timestamps,
 })
