@@ -5,8 +5,10 @@ const ProductDetailsLayout = ({ children }: {
     children: ReactNode
 }) => {
     return (
-        <div>
+        <div className="bg-stone-50">
+
             {children}
+
         </div>
     )
 }

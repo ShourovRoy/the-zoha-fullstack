@@ -1,8 +1,8 @@
+import 'server-only'
 import { db } from '@/database/db'
 import { productTable } from '@/database/schemas/product'
 import { and, count, eq, gt, gte, ilike, lt, lte, sql, SQL } from 'drizzle-orm'
-import { cacheLife, cacheTag } from 'next/cache'
-import 'server-only'
+import { cacheLife, cacheTag, updateTag } from 'next/cache'
 
 
 export async function getAllProducts(productName?: string, currentPage: number = 0, categoryId?: string, minPrice?: number, maxPrice?: number) {
@@ -76,23 +76,62 @@ export async function getAllProducts(productName?: string, currentPage: number =
 }
 
 
+// get product details
+export async function getProductDetails(slug: string) {
+    'use cache'
+
+    cacheTag(`productSlug-${slug}`)
+    cacheLife("hours")
+
+    try {
+        const productsRes = await db.query.productTable.findFirst({
+            with: {
+                category: true, galleryImages: true
+            },
+            where: {
+                slug: {
+                    eq: slug
+                }
+            },
+
+        })
+
+        if (!productsRes) {
+            return {
+                errorMessage: "404 NOT FOUND!"
+            }
+        }
+
+        return {
+            productDetails: productsRes
+        }
+
+    } catch (error) {
+        console.log(error)
+        return {
+            errorMessage: "Something went wrong!"
+        }
+    }
+
+}
+
 //  get max and min price of products
 export async function getProductPriceBoundaries() {
-  try {
-    const [result] = await db
-      .select({
-        // sql<number>`...` tells TypeScript to expect a numeric return value
-        lowestPrice: sql<number>`cast(min(${productTable.price}) as float)`,
-        highestPrice: sql<number>`cast(max(${productTable.price}) as float)`,
-      })
-      .from(productTable);
+    try {
+        const [result] = await db
+            .select({
+                // sql<number>`...` tells TypeScript to expect a numeric return value
+                lowestPrice: sql<number>`cast(min(${productTable.price}) as float)`,
+                highestPrice: sql<number>`cast(max(${productTable.price}) as float)`,
+            })
+            .from(productTable);
 
-    return {
-      minPrice: result?.lowestPrice ?? 0,
-      maxPrice: result?.highestPrice ?? 100, // Safe design system fallback
-    };
-  } catch (error) {
-    console.error("Failed to fetch price boundaries:", error);
-    return { minPrice: 0, maxPrice: 100 };
-  }
+        return {
+            minPrice: result?.lowestPrice ?? 0,
+            maxPrice: result?.highestPrice ?? 100, // Safe design system fallback
+        };
+    } catch (error) {
+        console.error("Failed to fetch price boundaries:", error);
+        return { minPrice: 0, maxPrice: 100 };
+    }
 }

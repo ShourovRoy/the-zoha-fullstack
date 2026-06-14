@@ -8,7 +8,7 @@ import ProductSearch from './_components/product-search'
 const getAssetUrl = (key: string) => {
     if (!key) return "";
     if (key.startsWith('http')) return key;
-    return `${process.env.S3_MEDIA_DOMAIN}/${key}`;
+    return `${process.env.NEXT_PUBLIC_S3_MEDIA_DOMAIN}/${key}`;
 }
 
 interface PageProps {
@@ -110,7 +110,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                                         {/* Action Controls Group */}
                                         <div className="grid grid-cols-4 gap-2">
                                             <Link
-                                                href={`/products/product-details/${product.slug}/`}
+                                                href={`/product-details/${product.slug}/`}
                                                 className="col-span-1 border border-neutral-200 hover:bg-neutral-50 rounded-lg flex items-center justify-center text-neutral-400 hover:text-neutral-600 transition-colors"
                                             >
                                                 <Eye className="h-4 w-4" />

@@ -1,6 +1,7 @@
 import { decimal, integer, pgTable, uuid, varchar, boolean } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
 import { categoryTable } from "./category";
+import { InferSelectModel } from "drizzle-orm";
 
 export const productTable = pgTable("products", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -36,3 +37,5 @@ export const productImageTable = pgTable("productImages", {
   ...timestamps,
 })
 
+// Type for selecting data (read operations)
+export type ProductImageGallaryType = InferSelectModel<typeof productImageTable>;
