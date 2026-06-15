@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ShoppingBag, User } from "lucide-react"
 
-const DynamicNavLinks = ({ user, cartCount }: { user: SessionPayload | null, cartCount: number }) => {
+const DynamicNavLinks = ({ user, cartCount }: { user: SessionPayload | null | undefined, cartCount: number }) => {
     const pathname = usePathname()
     const isActive = (path: string) => pathname === path
 
@@ -18,7 +18,7 @@ const DynamicNavLinks = ({ user, cartCount }: { user: SessionPayload | null, car
             {/* Shareable Persistent Core Shopping Cart Trigger Icon */}
             <Link
                 href="/carts"
-                className={`relative p-2 rounded-xl border border-transparent transition-all flex items-center justify-center hover:bg-stone-50 group ${isActive('/cart')
+                className={`relative p-2 rounded-xl border border-transparent transition-all flex items-center justify-center hover:bg-stone-50 group ${isActive('/carts')
                     ? 'text-stone-900 bg-stone-50 border-stone-200/40'
                     : 'text-stone-600 hover:text-stone-900'
                     }`}
@@ -52,13 +52,13 @@ const DynamicNavLinks = ({ user, cartCount }: { user: SessionPayload | null, car
             ) : (
                 <div className="flex items-center gap-2">
                     <Link
-                        href="/login"
+                        href="/auth/login"
                         className="text-xs font-semibold text-stone-500 hover:text-stone-900 px-2.5 py-1.5 transition-colors"
                     >
                         Login
                     </Link>
                     <Link
-                        href="/signup"
+                        href="/auth/signup"
                         className="text-xs font-semibold bg-stone-900 text-white hover:bg-stone-800 px-3.5 py-1.5 rounded-xl shadow-xs transition-colors"
                     >
                         Sign Up

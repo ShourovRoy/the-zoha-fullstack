@@ -17,7 +17,10 @@ const ProductFilterByPriceRange = ({ minPrice, maxPrice }: {
     const params = new URLSearchParams(searchParams)
 
     const handleMinAmountChange = (amount: number) => {
+
+
         if (amount) {
+            if (params.get("page")) params.delete("page")
             setInputMinPriceValue(amount)
             params.set("minPrice", amount.toString())
         }
@@ -26,6 +29,7 @@ const ProductFilterByPriceRange = ({ minPrice, maxPrice }: {
 
     const handleMaxAmountChange = (amount: number) => {
         if (amount) {
+            if (params.get("page")) params.delete("page")
             setInputMaxPriceValue(amount)
             params.set("maxPrice", amount.toString())
         }

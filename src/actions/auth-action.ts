@@ -93,6 +93,9 @@ export async function signup(formState: signupFormState, formData: FormData) {
 
         await createSession(user.id, user.role)
 
+        console.log("created")
+
+
         redirect("/")
 
     } catch (error) {
@@ -145,6 +148,8 @@ export async function login(fromState: loginFormState, formData: FormData) {
     // create session
 
     await createSession(user.id, user.role)
+
+    console.log("user logged in", user.id)
 
     redirect("/")
 

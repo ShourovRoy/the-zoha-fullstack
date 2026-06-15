@@ -19,9 +19,9 @@ export async function addRemoveCart(payload: {
     try {
 
         // get user
-        const user = await getUser()
+        const user = await getUser(false)
 
-        if (!user?.userId || !user) {
+        if (!user || !user?.userId) {
             return {
                 errorMessage: "Authentication required!"
             }
@@ -159,8 +159,9 @@ export async function addRemoveCart(payload: {
         }
 
     } catch (error) {
+        console.log(error)
         return {
-            errorMessage: "Unable tp perform cart actions! Try again"
+            errorMessage: "Unable to perform cart actions! Try again"
         }
     }
 

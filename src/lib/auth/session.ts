@@ -39,7 +39,7 @@ export async function createSession(userId: string, role: string) {
 
     cookieStore.set('session', session, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.APP_STATUS === "PRODUCTION",
         expires: expiresAt,
         sameSite: 'lax',
         path: '/',
@@ -52,19 +52,20 @@ export async function deleteSession() {
     cookieStore.delete('session')
 }
 
-export async function getUser() {
+export async function getUser(isRedirectRequired: boolean = true): Promise<SessionPayload | undefined | null> {
     const cookieStore = await cookies()
     const session = cookieStore.get("session")
-    if (!session?.value) {
+    if ((!session || !session?.value) && isRedirectRequired) {
 
         redirect("/")
 
     }
-    const user: SessionPayload | undefined = await decrypt(session.value)
-    if (!user) {
+
+    const user: SessionPayload | undefined = await decrypt(session?.value!)
+    if (!user && isRedirectRequired) {
 
         redirect("/")
     }
-    
-    return user
+
+    return user || null
 }

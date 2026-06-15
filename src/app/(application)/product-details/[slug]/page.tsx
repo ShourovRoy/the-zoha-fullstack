@@ -1,9 +1,8 @@
 import { getProductDetails } from '@/lib/data/product-data'
 import ProductImageGallary from '../_components/product-image-gallary'
 import Link from 'next/link'
-import { ArrowLeft, ShoppingBag } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import AddToCartBtn from '../_components/add-to-cart-button'
-import { getUser } from '@/lib/auth/session'
 
 const ProductSlugDetailsPage = async ({
     params
@@ -14,7 +13,7 @@ const ProductSlugDetailsPage = async ({
 }) => {
     const { slug } = await params
     const { errorMessage, productDetails } = await getProductDetails(slug);
-    const user = await getUser()
+
 
     if (errorMessage || !productDetails) {
         return (
