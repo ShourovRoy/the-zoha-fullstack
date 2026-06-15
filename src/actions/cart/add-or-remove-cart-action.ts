@@ -4,6 +4,7 @@ import { db } from "@/database/db"
 import { cartTable } from "@/database/schemas/cart"
 import { AddRemoveCartSchema } from "@/lib/types/definitions"
 import { and, eq, sql } from "drizzle-orm"
+import { revalidatePath } from "next/cache"
 
 
 // handle add and remove cart
@@ -54,6 +55,9 @@ export async function addRemoveCart(payload: {
                     }).where(and(eq(cartTable.id, existingCart.id), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false), eq(cartTable.productId, existingCart.productId!)))
 
 
+                    //  revalidate path to update the cart items
+                    revalidatePath('/', 'layout')
+
                     return {
                         message: "Existing cart has been update."
                     }
@@ -67,6 +71,10 @@ export async function addRemoveCart(payload: {
                     }
 
                     await db.insert(cartTable).values(item)
+
+                    //  revalidate path to update the cart items
+                    revalidatePath('/', 'layout')
+
                     return {
                         message: "Added to the cart."
                     }
@@ -78,6 +86,10 @@ export async function addRemoveCart(payload: {
                 }
 
                 await db.delete(cartTable).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+
+                //  revalidate path to update the cart items
+                revalidatePath('/', 'layout')
+
                 return {
                     message: "Removed from the cart."
                 }
@@ -88,6 +100,11 @@ export async function addRemoveCart(payload: {
                 await db.update(cartTable).set({
                     quantity: sql`${cartTable.quantity} + 1`
                 }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+
+
+                //  revalidate path to update the cart items
+                revalidatePath('/', 'layout')
+
                 return {
                     message: "Quantity increased."
                 }
@@ -98,6 +115,10 @@ export async function addRemoveCart(payload: {
                 await db.update(cartTable).set({
                     quantity: sql`GREATEST(${cartTable.quantity} - 1, 0)`
                 }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+
+                //  revalidate path to update the cart items
+                revalidatePath('/', 'layout')
+                
                 return {
                     message: "Quantity decreased."
                 }
