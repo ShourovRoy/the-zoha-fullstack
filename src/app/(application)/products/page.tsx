@@ -59,7 +59,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         {products.map((product) => {
                             // Formatted for Bangladeshi Taka standard presentation (Whole numbers)
-                            const formattedPrice = new Intl.NumberFormat('en', {
+                            const formattedPrice = new Intl.NumberFormat('bn-BD', {
                                 style: 'currency',
                                 currency: 'BDT',
                                 currencyDisplay: 'symbol',

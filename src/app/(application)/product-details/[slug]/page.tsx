@@ -85,11 +85,11 @@ const ProductSlugDetailsPage = async ({
                         <div>
                             {isOutOfStock ? (
                                 <span className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-100/60 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                                    স্টক শেষ
+                                    Out of stock
                                 </span>
                             ) : (
                                 <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100/60 px-2 py-0.5 rounded-md uppercase tracking-wider">
-                                    In Stock
+                                    In Stock {productDetails.quantity}
                                 </span>
                             )}
                         </div>

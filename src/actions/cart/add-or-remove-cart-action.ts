@@ -43,12 +43,6 @@ export async function addRemoveCart(payload: {
 
 
 
-
-
-
-
-
-
         switch (actionType) {
             case "addToCart":
 

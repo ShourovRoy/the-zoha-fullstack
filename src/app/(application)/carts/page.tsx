@@ -3,6 +3,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Layers } from "lucide-react"
 import CartIncrementButton from "./_components/cart-increment-button"
+import CartDecrementButton from "./_components/cart-decrement-button"
+import CartRemoveItemButton from "./_components/cart-remove-item-button"
 
 const getAssetUrl = (key?: string | null) => {
     if (!key) return null
@@ -99,9 +101,7 @@ const CartPage = async () => {
                             <div className="flex flex-col sm:flex-row items-end sm:items-center gap-4 shrink-0">
                                 {/* Programmatic Counter Tool Blocks */}
                                 <div className="flex items-center border border-stone-200/80 rounded-lg bg-stone-50/50 p-0.5 h-8">
-                                    <button className="p-1 text-stone-500 hover:text-stone-900 hover:bg-white rounded-md transition-all active:scale-95">
-                                        <Minus className="h-3 w-3" />
-                                    </button>
+                                    <CartDecrementButton cartId={item.id} currentQuantity={item.quantity!} productId={item.productId!} />
                                     <span className="text-xs font-bold text-stone-800 px-3 min-w-7 text-center tabular-nums">
                                         {item.quantity || 1}
                                     </span>
@@ -112,9 +112,11 @@ const CartPage = async () => {
                                 </div>
 
                                 {/* Absolute Item Trash Purge Trigger */}
-                                <button className="p-2 text-stone-400 hover:text-red-600 rounded-xl hover:bg-red-50/50 transition-colors">
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                </button>
+                                <CartRemoveItemButton
+                                    cartId={item.id}
+                                    productId={item.productId!}
+
+                                />
                             </div>
                         </div>
                     )
