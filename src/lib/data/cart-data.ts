@@ -77,7 +77,6 @@ export async function getCartCachedItems(userId: string) {
             }
         })
 
-        console.log(cartItems)
 
         if (cartItems) {
             return cartItems as CartItemList
@@ -98,7 +97,7 @@ export async function getCartItems() {
     try {
         const user = await getUser()
 
-        if (!user.userId) return {
+        if (!user || !user.userId) return {
             cartItems: []
         }
 

@@ -48,7 +48,6 @@ export async function createProduct(formState: createProductFormState, formData:
 
     // 2. Return flat errors matched against our updated createProductFormState type shape
     if (!validatedFields.success) {
-        console.log(validatedFields.error)
         return {
             errors: z.flattenError(validatedFields.error).fieldErrors,
             errorMessage: "Please fix the validation errors below."
@@ -146,7 +145,6 @@ export async function createProduct(formState: createProductFormState, formData:
 
     } catch (error) {
 
-        console.log(error)
         return {
             errorMessage: "Failed to upload product!"
         }

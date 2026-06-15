@@ -15,7 +15,6 @@ export async function getAllCategories(categoryName?: string, currentPage: numbe
   let offset: number = 0;
 
   if (categoryName) {
-    console.log(categoryName)
     filters.push(ilike(categoryTable.name, categoryName))
   }
 
@@ -31,7 +30,7 @@ export async function getAllCategories(categoryName?: string, currentPage: numbe
 
 
   const totalPages = Math.ceil(Number(categoriesCount[0]?.count) / 6)
-  console.log(categoriesCount)
+  
   return {
     categories,
     totalPages

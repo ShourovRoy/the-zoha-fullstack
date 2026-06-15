@@ -159,7 +159,6 @@ export async function addRemoveCart(payload: {
         }
 
     } catch (error) {
-        console.log(error)
         return {
             errorMessage: "Unable to perform cart actions! Try again"
         }

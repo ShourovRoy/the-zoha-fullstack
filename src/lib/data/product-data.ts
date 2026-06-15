@@ -107,7 +107,6 @@ export async function getProductDetails(slug: string) {
         }
 
     } catch (error) {
-        console.log(error)
         return {
             errorMessage: "Something went wrong!"
         }
