@@ -1,7 +1,5 @@
 'use server'
 
-import * as z from "zod";
-
 import { db } from "@/database/db"
 import { cartTable } from "@/database/schemas/cart"
 import { AddRemoveCartSchema } from "@/lib/types/definitions"
@@ -23,7 +21,7 @@ export async function addRemoveCart(payload: {
 
         if (validatedFields?.error) {
             return {
-                errors: "Validation failed!"
+                errorMessage: "Validation failed!"
             }
         }
 
@@ -35,20 +33,45 @@ export async function addRemoveCart(payload: {
             errorMessage: "Invalid request!"
         }
 
+
+
+
+
+
         switch (actionType) {
             case "addToCart":
 
-                const item: typeof cartTable.$inferInsert = {
-                    productId: productId,
-                    quantity: quantity || 1,
-                    isCompleted: false,
-                    userId: userId
+                // check if the product with active status with the user already exist in cart
+                const isExist = await db.select().from(cartTable).where(and(eq(cartTable.userId, userId), eq(cartTable.productId, productId), eq(cartTable.isCompleted, false)))
+
+                if (isExist && isExist.length > 0) {
+
+                    const existingCart = isExist[0]
+
+                    // update the existing cart
+                    await db.update(cartTable).set({
+                        quantity: sql`${cartTable.quantity} + 1`
+                    }).where(and(eq(cartTable.id, existingCart.id), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false), eq(cartTable.productId, existingCart.productId!)))
+
+
+                    return {
+                        message: "Existing cart has been update."
+                    }
+                } else {
+
+                    const item: typeof cartTable.$inferInsert = {
+                        productId: productId,
+                        quantity: quantity || 1,
+                        isCompleted: false,
+                        userId: userId
+                    }
+
+                    await db.insert(cartTable).values(item)
+                    return {
+                        message: "Added to the cart."
+                    }
                 }
 
-                await db.insert(cartTable).values(item)
-                return {
-                    message: "Added to the cart."
-                }
             case "removeFromCart":
                 if (!cartId) return {
                     errorMessage: "Invalid request!"
