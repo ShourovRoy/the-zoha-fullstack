@@ -85,9 +85,13 @@ const CartPage = async () => {
                                             {item.products.category.name}
                                         </span>
                                     )}
-                                    <h3 className="text-xs font-bold text-stone-900 truncate tracking-tight pr-4 block pt-0.5">
-                                        {item.products?.name || "Premium Workspace Asset"}
-                                    </h3>
+                                    {item.products?.slug && (
+                                        <Link href={`product-details/${item.products.slug}`}>
+                                            <h3 className="text-xs font-bold text-stone-900 truncate tracking-tight pr-4 block pt-0.5">
+                                                {item.products?.name || "Premium Workspace Asset"}
+                                            </h3>
+                                        </Link>
+                                    )}
                                     <div className="text-xs font-semibold text-stone-900 tabular-nums">
                                         {formattedItemPrice}
                                     </div>

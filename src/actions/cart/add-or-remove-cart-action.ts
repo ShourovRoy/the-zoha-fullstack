@@ -46,12 +46,38 @@ export async function addRemoveCart(payload: {
         switch (actionType) {
             case "addToCart":
 
+
+
                 // check if the product with active status with the user already exist in cart
-                const isExist = await db.select().from(cartTable).where(and(eq(cartTable.userId, user.userId), eq(cartTable.productId, productId), eq(cartTable.isCompleted, false)))
+                const isExist = await db.query.cartTable.findFirst({
+                    with: {
+                        products: true
+                    },
+                    where: {
+                        userId: {
+                            eq: user.userId,
+                        },
+                        productId: {
+                            eq: productId,
+                        },
+                        isCompleted: {
+                            eq: false
+                        }
+                    }
+                })
 
-                if (isExist && isExist.length > 0) {
 
-                    const existingCart = isExist[0]
+
+                if (isExist) {
+
+                    // handle if cart item quantity request excedding product item quantity
+                    if (isExist.quantity === isExist.products?.quantity) {
+                        return {
+                            errorMessage: "Can't add more!"
+                        }
+                    }
+
+                    const existingCart = isExist
 
                     // update the existing cart
                     await db.update(cartTable).set({
