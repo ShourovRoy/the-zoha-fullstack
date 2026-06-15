@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 interface AddToCartBtnProps {
     productId: string;
     cartId?: string;
-    userId: string;
     quantity: number;
     actionType: "addToCart" | "removeFromCart" | "increment" | "decrement";
     isOutOfStock: boolean;
@@ -16,7 +15,6 @@ interface AddToCartBtnProps {
 const AddToCartBtn = ({
     productId,
     cartId,
-    userId,
     quantity,
     actionType,
     isOutOfStock
@@ -45,7 +43,6 @@ const AddToCartBtn = ({
 
         try {
             const res = await addRemoveCart({
-                userId,
                 actionType,
                 productId,
                 cartId,

@@ -141,7 +141,7 @@ export type createProductFormState =
 // addCartandremove action
 
 export const AddRemoveCartSchema = z.object({
-    userId: z.string({ error: "Invalid user!" }),
+    userId: z.string({ error: "Invalid user!" }).optional(),
     productId: z.string({ error: "Invalid product!" }),
     cartId: z.string({ error: "Invalid cart Id" }).optional(),
 

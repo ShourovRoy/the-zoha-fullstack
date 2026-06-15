@@ -101,7 +101,6 @@ const ProductSlugDetailsPage = async ({
                             actionType='addToCart'
                             isOutOfStock={isOutOfStock}
                             productId={productDetails.id}
-                            userId={user.userId}
                             quantity={1}
                             cartId={undefined}
                         />

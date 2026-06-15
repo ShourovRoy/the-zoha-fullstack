@@ -2,6 +2,7 @@
 
 import { db } from "@/database/db"
 import { cartTable } from "@/database/schemas/cart"
+import { getUser } from "@/lib/auth/session"
 import { AddRemoveCartSchema } from "@/lib/types/definitions"
 import { and, eq, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
@@ -9,7 +10,6 @@ import { revalidatePath } from "next/cache"
 
 // handle add and remove cart
 export async function addRemoveCart(payload: {
-    userId: string;
     productId: string;
     cartId?: string;
     quantity?: number;
@@ -18,7 +18,16 @@ export async function addRemoveCart(payload: {
 
     try {
 
-        const validatedFields = AddRemoveCartSchema.safeParse(payload)
+        // get user
+        const user = await getUser()
+
+        if (!user?.userId || !user) {
+            return {
+                errorMessage: "Authentication required!"
+            }
+        }
+
+        const validatedFields = AddRemoveCartSchema.safeParse({ ...payload, userId: user.userId })
 
         if (validatedFields?.error) {
             return {
@@ -28,11 +37,12 @@ export async function addRemoveCart(payload: {
 
         const { productId, userId, quantity, actionType, cartId } = validatedFields.data
 
-
-
-        if (!productId || !userId) return {
+        if (!productId || !user.userId) return {
             errorMessage: "Invalid request!"
         }
+
+
+
 
 
 
@@ -43,7 +53,7 @@ export async function addRemoveCart(payload: {
             case "addToCart":
 
                 // check if the product with active status with the user already exist in cart
-                const isExist = await db.select().from(cartTable).where(and(eq(cartTable.userId, userId), eq(cartTable.productId, productId), eq(cartTable.isCompleted, false)))
+                const isExist = await db.select().from(cartTable).where(and(eq(cartTable.userId, user.userId), eq(cartTable.productId, productId), eq(cartTable.isCompleted, false)))
 
                 if (isExist && isExist.length > 0) {
 
@@ -52,7 +62,7 @@ export async function addRemoveCart(payload: {
                     // update the existing cart
                     await db.update(cartTable).set({
                         quantity: sql`${cartTable.quantity} + 1`
-                    }).where(and(eq(cartTable.id, existingCart.id), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false), eq(cartTable.productId, existingCart.productId!)))
+                    }).where(and(eq(cartTable.id, existingCart.id), eq(cartTable.userId, user.userId), eq(cartTable.isCompleted, false), eq(cartTable.productId, existingCart.productId!)))
 
 
                     //  revalidate path to update the cart items
@@ -85,7 +95,7 @@ export async function addRemoveCart(payload: {
                     errorMessage: "Invalid request!"
                 }
 
-                await db.delete(cartTable).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+                await db.delete(cartTable).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, user.userId), eq(cartTable.isCompleted, false)))
 
                 //  revalidate path to update the cart items
                 revalidatePath('/', 'layout')
@@ -99,7 +109,7 @@ export async function addRemoveCart(payload: {
                 }
                 await db.update(cartTable).set({
                     quantity: sql`${cartTable.quantity} + 1`
-                }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+                }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, user.userId), eq(cartTable.isCompleted, false)))
 
 
                 //  revalidate path to update the cart items
@@ -114,11 +124,11 @@ export async function addRemoveCart(payload: {
                 }
                 await db.update(cartTable).set({
                     quantity: sql`GREATEST(${cartTable.quantity} - 1, 0)`
-                }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, userId), eq(cartTable.isCompleted, false)))
+                }).where(and(eq(cartTable.id, cartId!), eq(cartTable.userId, user.userId), eq(cartTable.isCompleted, false)))
 
                 //  revalidate path to update the cart items
                 revalidatePath('/', 'layout')
-                
+
                 return {
                     message: "Quantity decreased."
                 }

@@ -2,6 +2,7 @@ import { getCartItems } from "@/lib/data/cart-data"
 import Image from "next/image"
 import Link from "next/link"
 import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Layers } from "lucide-react"
+import CartIncrementButton from "./_components/cart-increment-button"
 
 const getAssetUrl = (key?: string | null) => {
     if (!key) return null
@@ -31,7 +32,7 @@ const CartPage = async () => {
                     <ShoppingBag className="h-5 w-5" />
                 </div>
                 <h2 className="text-sm font-semibold text-stone-900">Your shopping bag is completely empty</h2>
-                <p className="text-xs text-stone-400 mt-1 max-w-[240px] mx-auto leading-relaxed">
+                <p className="text-xs text-stone-400 mt-1 max-w-60 mx-auto leading-relaxed">
                     Explore our collection catalog to find premium pieces for your workspace setup.
                 </p>
                 <Link href="/products" className="mt-5 inline-flex items-center justify-center bg-stone-900 hover:bg-stone-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors shadow-xs">
@@ -59,7 +60,7 @@ const CartPage = async () => {
                         >
                             {/* Context & Media Layout Wrapper */}
                             <div className="flex items-center gap-4 min-w-0 flex-1">
-                                <div className="h-20 w-20 aspect-square rounded-xl bg-stone-50 border border-stone-100 overflow-hidden flex-shrink-0 relative flex items-center justify-center">
+                                <div className="h-20 w-20 aspect-square rounded-xl bg-stone-50 border border-stone-100 overflow-hidden shrink-0 relative flex items-center justify-center">
                                     {imageUrl ? (
                                         <Image
                                             loading="eager"
@@ -88,25 +89,26 @@ const CartPage = async () => {
                                     <div className="text-xs font-semibold text-stone-900 tabular-nums">
                                         {formattedItemPrice}
                                     </div>
-                                    <span className="text-[9px] text-stone-300 font-mono block tracking-tight truncate max-w-[120px]">
+                                    <span className="text-[9px] text-stone-300 font-mono block tracking-tight truncate max-w-30">
                                         ID: {item.id}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Adjustment Actions Group Interface Control */}
-                            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-4 flex-shrink-0">
+                            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-4 shrink-0">
                                 {/* Programmatic Counter Tool Blocks */}
                                 <div className="flex items-center border border-stone-200/80 rounded-lg bg-stone-50/50 p-0.5 h-8">
                                     <button className="p-1 text-stone-500 hover:text-stone-900 hover:bg-white rounded-md transition-all active:scale-95">
                                         <Minus className="h-3 w-3" />
                                     </button>
-                                    <span className="text-xs font-bold text-stone-800 px-3 min-w-[28px] text-center tabular-nums">
+                                    <span className="text-xs font-bold text-stone-800 px-3 min-w-7 text-center tabular-nums">
                                         {item.quantity || 1}
                                     </span>
-                                    <button className="p-1 text-stone-500 hover:text-stone-900 hover:bg-white rounded-md transition-all active:scale-95">
-                                        <Plus className="h-3 w-3" />
-                                    </button>
+                                    <CartIncrementButton
+                                        cartId={item.id}
+                                        productId={item.productId!}
+                                    />
                                 </div>
 
                                 {/* Absolute Item Trash Purge Trigger */}
