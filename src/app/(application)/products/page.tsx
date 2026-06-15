@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Eye, ShoppingBag } from "lucide-react"
 import ProductPagination from './_components/product-pagination'
 import ProductSearch from './_components/product-search'
+import AddToBagButton from './_components/add-to-bag-button'
 
 const getAssetUrl = (key: string) => {
     if (!key) return "";
@@ -115,16 +116,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                                             >
                                                 <Eye className="h-4 w-4" />
                                             </Link>
-                                            <button
-                                                disabled={isOutOfStock}
-                                                className={`col-span-3 py-2 text-xs font-medium rounded-lg flex items-center justify-center gap-1.5 transition-colors ${isOutOfStock
-                                                    ? "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-                                                    : "bg-neutral-900 hover:bg-neutral-800 text-white"
-                                                    }`}
-                                            >
-                                                <ShoppingBag className="h-3.5 w-3.5" />
-                                                Add to Bag
-                                            </button>
+                                            <AddToBagButton isOutOfStock={isOutOfStock} productId={product.id} />
                                         </div>
                                     </div>
                                 </div>
