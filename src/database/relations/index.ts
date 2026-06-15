@@ -30,7 +30,19 @@ export const relations = defineRelations(schema, (r) => ({
             from: r.productImageTable.productId,
             to: r.productTable.id
         })
+    },
+
+
+    // cart product relation
+    cartTable: {
+        products: r.one.productTable({
+            from: r.cartTable.productId,
+            to: r.productTable.id,
+        })
     }
+
+
+
 
 }));
 

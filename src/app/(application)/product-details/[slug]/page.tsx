@@ -2,6 +2,8 @@ import { getProductDetails } from '@/lib/data/product-data'
 import ProductImageGallary from '../_components/product-image-gallary'
 import Link from 'next/link'
 import { ArrowLeft, ShoppingBag } from 'lucide-react'
+import AddToCartBtn from '../_components/add-to-cart-button'
+import { getUser } from '@/lib/auth/session'
 
 const ProductSlugDetailsPage = async ({
     params
@@ -12,6 +14,7 @@ const ProductSlugDetailsPage = async ({
 }) => {
     const { slug } = await params
     const { errorMessage, productDetails } = await getProductDetails(slug);
+    const user = await getUser()
 
     if (errorMessage || !productDetails) {
         return (
@@ -94,16 +97,14 @@ const ProductSlugDetailsPage = async ({
 
                     {/* Primary Buy Action Trigger Interface Element */}
                     <div className="pt-1">
-                        <button
-                            disabled={isOutOfStock}
-                            className={`w-full py-3 px-4 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ${isOutOfStock
-                                ? "bg-stone-100 text-stone-400 border border-stone-200/50 cursor-not-allowed"
-                                : "bg-stone-900 hover:bg-stone-800 text-white shadow-sm hover:shadow-md"
-                                }`}
-                        >
-                            <ShoppingBag className="h-4 w-4 shrink-0" />
-                            {isOutOfStock ? "Unavailable" : "Add to Shopping Bag"}
-                        </button>
+                        <AddToCartBtn
+                            actionType='addToCart'
+                            isOutOfStock={isOutOfStock}
+                            productId={productDetails.id}
+                            userId={user.userId}
+                            quantity={1}
+                            cartId={undefined}
+                        />
                     </div>
 
                     {/* Expanded Rich Content Block Field Section */}

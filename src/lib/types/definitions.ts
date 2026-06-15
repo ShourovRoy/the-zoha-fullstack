@@ -127,9 +127,40 @@ export type createProductFormState =
             desc?: string[]
             quantity?: string[]
             thresholdQuantity?: string[]
-            categoryId?: string[]       
-            featuredImageKey?: string[] 
-            gallaryImages?: string[]   
+            categoryId?: string[]
+            featuredImageKey?: string[]
+            gallaryImages?: string[]
+        }
+        errorMessage?: string
+        message?: string
+    }
+    | undefined;
+
+
+
+// addCartandremove action
+
+export const AddRemoveCartSchema = z.object({
+    userId: z.string({ error: "Invalid user!" }),
+    productId: z.string({ error: "Invalid product!" }),
+    cartId: z.string({ error: "Invalid cart Id" }).optional(),
+
+    quantity: z.coerce.number({
+        error: "Quantity must need to valid!"
+    }).positive({ message: "Can not be negative number!" }),
+
+    actionType: z.enum(['addToCart', 'removeFromCart', 'increment', 'decrement'])
+})
+
+
+
+export type addRemoveCartState =
+    | {
+        errors?: {
+            productId?: string[]
+            userId?: string[]
+            quantity?: string[]
+            actionType?: string[]
         }
         errorMessage?: string
         message?: string
