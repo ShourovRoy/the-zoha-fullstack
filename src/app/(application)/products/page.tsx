@@ -86,7 +86,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                                         {isOutOfStock && (
                                             <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
                                                 <span className="text-[10px] font-bold text-neutral-900 bg-white px-2.5 py-1 rounded shadow-xs uppercase tracking-wider">
-                                                    স্টক শেষ
+                                                    Out of Stock
                                                 </span>
                                             </div>
                                         )}

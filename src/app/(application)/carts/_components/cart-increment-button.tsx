@@ -7,9 +7,11 @@ import { useState, useEffect } from "react"
 interface CartIncrementButtonProps {
     productId: string;
     cartId: string;
+    maxQuantity: number;
+    currentCartQuantity: number;
 }
 
-const CartIncrementButton = ({ productId, cartId }: CartIncrementButtonProps) => {
+const CartIncrementButton = ({ productId, cartId, maxQuantity, currentCartQuantity }: CartIncrementButtonProps) => {
     const [state, setState] = useState<{
         message: string | null
         errorMessage: string | null
@@ -31,8 +33,25 @@ const CartIncrementButton = ({ productId, cartId }: CartIncrementButtonProps) =>
     }, [state.errorMessage, state.message])
 
     const incrementAction = async () => {
+
+
+
         // 1. Set loading state immediately
         setState(prev => ({ ...prev, isLoading: true, errorMessage: null, message: null }))
+
+
+        // compare products max quantity and current cart quantity
+        if (currentCartQuantity >= maxQuantity) {
+            setState(prev => ({
+                ...prev,
+                isLoading: false,
+                message: null,
+                errorMessage: "Can't add more!"
+            }))
+
+            return
+        }
+
 
         try {
             const res = await addRemoveCart({
@@ -77,8 +96,8 @@ const CartIncrementButton = ({ productId, cartId }: CartIncrementButtonProps) =>
                 onClick={incrementAction}
                 disabled={state.isLoading}
                 className={`p-1 rounded-md transition-all flex items-center justify-center h-6 w-6 relative focus:outline-hidden ${state.errorMessage
-                        ? 'text-red-600 bg-red-50 border border-red-200'
-                        : 'text-stone-500 hover:text-stone-900 hover:bg-white border border-transparent active:scale-95 disabled:opacity-50'
+                    ? 'text-red-600 bg-red-50 border border-red-200'
+                    : 'text-stone-500 hover:text-stone-900 hover:bg-white border border-transparent active:scale-95 disabled:opacity-50'
                     }`}
                 title={state.errorMessage || state.message || "Increase Quantity"}
             >

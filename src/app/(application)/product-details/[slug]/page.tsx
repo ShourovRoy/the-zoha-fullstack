@@ -31,7 +31,7 @@ const ProductSlugDetailsPage = async ({
     const isOutOfStock = (productDetails.quantity ?? 0) <= 0;
 
     // Formatting currency for local display framework format guidelines
-    const formattedPrice = new Intl.NumberFormat('en', {
+    const formattedPrice = new Intl.NumberFormat('bn-BD', {
         style: 'currency',
         currency: 'BDT',
         currencyDisplay: 'symbol',

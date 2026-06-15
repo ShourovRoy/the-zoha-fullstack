@@ -108,6 +108,8 @@ const CartPage = async () => {
                                     <CartIncrementButton
                                         cartId={item.id}
                                         productId={item.productId!}
+                                        currentCartQuantity={item.quantity!}
+                                        maxQuantity={item.products?.quantity!}
                                     />
                                 </div>
 
