@@ -6,7 +6,7 @@ const CartLayout = ({ children }: { children: ReactNode }) => {
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
                 <div className="mb-8">
                     <span className="text-[10px] font-bold tracking-widest text-stone-400 uppercase block mb-1">
-                        Your Order Workspace
+                        Your added item Workspace
                     </span>
                     <h1 className="text-xl font-bold text-stone-900 tracking-tight sm:text-2xl">
                         Shopping Cart

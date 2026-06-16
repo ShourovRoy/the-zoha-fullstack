@@ -1,7 +1,7 @@
 import { getCartItems } from "@/lib/data/cart-data"
 import Image from "next/image"
 import Link from "next/link"
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag, Layers } from "lucide-react"
+import { ArrowRight, ShoppingBag, Layers } from "lucide-react"
 import CartIncrementButton from "./_components/cart-increment-button"
 import CartDecrementButton from "./_components/cart-decrement-button"
 import CartRemoveItemButton from "./_components/cart-remove-item-button"
@@ -132,7 +132,7 @@ const CartPage = async () => {
             {/* Right Side: Fixed Order Invoice Breakdown Sidebar Pane */}
             <div className="lg:col-span-4 bg-white rounded-2xl border border-stone-200/40 p-5 sm:p-6 space-y-5 lg:sticky lg:top-24 shadow-xs">
                 <h3 className="text-xs font-bold text-stone-800 tracking-wider uppercase">
-                    Order Summary
+                    Your Cart
                 </h3>
 
                 <div className="space-y-3 text-xs pt-1">
