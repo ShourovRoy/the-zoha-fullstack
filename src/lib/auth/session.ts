@@ -27,7 +27,7 @@ export async function decrypt(session: string | undefined = '') {
         })
         return payload as SessionPayload
     } catch (error) {
-        
+
         return undefined
     }
 }
@@ -56,15 +56,17 @@ export async function deleteSession() {
 export async function getUser(isRedirectRequired: boolean = true): Promise<SessionPayload | undefined | null> {
     const cookieStore = await cookies()
     const session = cookieStore.get("session")
+    console.log("session: ", session)
     if ((!session || !session?.value) && isRedirectRequired) {
-
-        redirect("/")
+        console.log("redirection from session missing ")
+        redirect("/auth/login")
 
     }
 
     const user: SessionPayload | undefined = await decrypt(session?.value!)
     if (!user && isRedirectRequired) {
 
+        console.log("redirection from user missing ")
         redirect("/")
     }
 

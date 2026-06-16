@@ -6,6 +6,7 @@ import { count, eq } from "drizzle-orm"
 import { cacheLife, cacheTag } from 'next/cache'
 import { getUser } from '../auth/session'
 import { CartItemList } from '../types/custom-definitions'
+import { redirect } from 'next/navigation'
 
 
 
@@ -87,27 +88,43 @@ export async function getCartCachedItems(userId: string) {
 }
 
 // get all dynamic cart items with auth
-export async function getCartItems() {
+export async function getCartItems(redirectUnauthenticated?: boolean, userRefId?: string) {
 
-    try {
-        const user = await getUser()
+    let userId: string;
 
-        if (!user || !user.userId) return {
-            cartItems: []
-        }
-
-
-        const res = await getCartCachedItems(user.userId)
-
-        return {
-            cartItems: res
-        }
+    // if user id is provided no need to call getUser
+    if (!userRefId) {
+        const user = await getUser(redirectUnauthenticated)
+        userId = user?.userId!;
+    } else {
+        userId = userRefId
+    }
 
 
-    } catch (error) {
-        return {
-            cartItems: []
+    if (!userId) {
+
+        if (redirectUnauthenticated) {
+            console.log("redirect unath from cart data")
+            redirect("/auth/login")
+
+
+
+        } else {
+            return {
+                cartItems: []
+            }
         }
     }
+
+
+    const res = await getCartCachedItems(userId)
+    console.log(res)
+
+    return {
+        cartItems: res
+    }
+
+
+
 
 }

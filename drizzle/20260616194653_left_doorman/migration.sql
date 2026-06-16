@@ -1,0 +1,2 @@
+ALTER TABLE "orders" ALTER COLUMN "total_order_items" SET DATA TYPE integer USING "total_order_items"::integer;--> statement-breakpoint
+ALTER TABLE "orders" ALTER COLUMN "total_order_items" SET DEFAULT 0;

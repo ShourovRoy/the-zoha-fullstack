@@ -1,5 +1,5 @@
 import * as schema from "@/database/relations/schema"
-import { defineRelations, defineRelationsPart } from 'drizzle-orm';
+import { defineRelations } from 'drizzle-orm';
 
 
 export const relations = defineRelations(schema, (r) => ({
@@ -39,9 +39,27 @@ export const relations = defineRelations(schema, (r) => ({
             from: r.cartTable.productId,
             to: r.productTable.id,
         })
+
+    },
+
+
+    orderTable: {
+        orderItems: r.many.orderItemTable({
+            from: r.orderTable.id,
+            to: r.orderItemTable.id
+        }),
+        user: r.one.usersTable({
+            from: r.orderTable.orderUserId,
+            to: r.usersTable.id
+        })
+    },
+
+    usersTable: {
+        orders: r.many.orderTable({
+            from: r.usersTable.id,
+            to: r.orderTable.orderUserId
+        })
     }
-
-
 
 
 }));
