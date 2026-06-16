@@ -8,6 +8,6 @@ export const cartTable = pgTable("carts", {
     userId: uuid("user_id").references(() => usersTable.id),
     productId: uuid("product_id").references(() => productTable.id),
     quantity: integer("quantity").default(1),
-    isCompleted: boolean("is_completed").default(false),
+    // isCompleted: boolean("is_completed").default(false),
     ...timestamps,
 })

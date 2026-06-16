@@ -2,7 +2,7 @@ import 'server-only'
 
 import { db } from "@/database/db"
 import { cartTable } from "@/database/schemas/cart"
-import { and, count, eq } from "drizzle-orm"
+import { count, eq } from "drizzle-orm"
 import { cacheLife, cacheTag } from 'next/cache'
 import { getUser } from '../auth/session'
 import { CartItemList } from '../types/custom-definitions'
@@ -27,10 +27,7 @@ export async function getCartItemNumber(userId: string | null) {
             })
             .from(cartTable)
             .where(
-                and(
-                    eq(cartTable.userId, userId),
-                    eq(cartTable.isCompleted, false)
-                )
+                eq(cartTable.userId, userId),
             );
         const cartCount = result?.totalItems ?? 0;
 
@@ -68,9 +65,7 @@ export async function getCartCachedItems(userId: string) {
                 userId: {
                     eq: userId
                 },
-                isCompleted: {
-                    eq: false,
-                }
+
             },
             orderBy: {
                 created_at: "asc"
