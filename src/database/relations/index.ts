@@ -46,10 +46,21 @@ export const relations = defineRelations(schema, (r) => ({
     orderTable: {
         orderItems: r.many.orderItemTable({
             from: r.orderTable.id,
-            to: r.orderItemTable.id
+            to: r.orderItemTable.orderId
         }),
         user: r.one.usersTable({
             from: r.orderTable.orderUserId,
+            to: r.usersTable.id
+        })
+    },
+
+    orderItemTable: {
+        orderDetails: r.one.orderTable({
+            from: r.orderItemTable.orderId,
+            to: r.orderTable.id
+        }),
+        user: r.one.usersTable({
+            from: r.orderItemTable.userId,
             to: r.usersTable.id
         })
     },

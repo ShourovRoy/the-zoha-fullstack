@@ -104,10 +104,7 @@ export async function getCartItems(redirectUnauthenticated?: boolean, userRefId?
     if (!userId) {
 
         if (redirectUnauthenticated) {
-            console.log("redirect unath from cart data")
             redirect("/auth/login")
-
-
 
         } else {
             return {
@@ -118,7 +115,7 @@ export async function getCartItems(redirectUnauthenticated?: boolean, userRefId?
 
 
     const res = await getCartCachedItems(userId)
-    console.log(res)
+
 
     return {
         cartItems: res

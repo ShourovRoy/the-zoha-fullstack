@@ -56,9 +56,8 @@ export async function deleteSession() {
 export async function getUser(isRedirectRequired: boolean = true): Promise<SessionPayload | undefined | null> {
     const cookieStore = await cookies()
     const session = cookieStore.get("session")
-    console.log("session: ", session)
+    console.log("session: ++++++++++++++++++++++++ ", session)
     if ((!session || !session?.value) && isRedirectRequired) {
-        console.log("redirection from session missing ")
         redirect("/auth/login")
 
     }
@@ -66,7 +65,6 @@ export async function getUser(isRedirectRequired: boolean = true): Promise<Sessi
     const user: SessionPayload | undefined = await decrypt(session?.value!)
     if (!user && isRedirectRequired) {
 
-        console.log("redirection from user missing ")
         redirect("/")
     }
 

@@ -1,11 +1,10 @@
 import { getCartItems } from "@/lib/data/cart-data"
 import Image from "next/image"
 import Link from "next/link"
-import { ShoppingBag, Layers } from "lucide-react"
+import { ShoppingBag, Layers, ArrowRight } from "lucide-react"
 import CartIncrementButton from "./_components/cart-increment-button"
 import CartDecrementButton from "./_components/cart-decrement-button"
 import CartRemoveItemButton from "./_components/cart-remove-item-button"
-import ProceedCheckoutButton from "./_components/proceed-checkout-button"
 
 const getAssetUrl = (key?: string | null) => {
     if (!key) return null
@@ -157,7 +156,13 @@ const CartPage = async () => {
                 </div>
 
                 <div className="pt-2">
-                    <ProceedCheckoutButton />
+
+                    <Link
+                        href="/checkout/"
+                        className="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all duration-200 active:scale-[0.99]">
+                        <span>Proceed Checkout</span>
+                        <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                 </div>
             </div>
 
