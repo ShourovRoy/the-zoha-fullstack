@@ -1,0 +1,1 @@
+ALTER TABLE "transactions" DROP CONSTRAINT "transactions_order_id_orders_id_fkey", ADD CONSTRAINT "transactions_order_id_orders_id_fkey" FOREIGN KEY ("order_id") REFERENCES "orders"("id") ON DELETE SET NULL;

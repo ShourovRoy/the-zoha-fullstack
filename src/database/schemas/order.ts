@@ -19,6 +19,9 @@ export const orderProcessStatusEnum = pgEnum("order_process_status", [
     "confirming",
     "processing",
     "confirmed",
+    "failed",
+    "cancelled",
+    "error"
 ]);
 
 export const orderTable = pgTable("orders", {
@@ -32,6 +35,7 @@ export const orderTable = pgTable("orders", {
     orderPaymentChannel: varchar("order_payment_channel", {
         length: 200
     }),
+    orderPaymentMessage: varchar("order_payment_message", { length: 200 }),
     orderProcessStatus: orderProcessStatusEnum("order_process_status").default("confirming"),
     isCompleted: boolean("is_completed").default(false),
     ...timestamps,
@@ -46,7 +50,7 @@ export const orderItemTable = pgTable("orderItems", {
         onDelete: "cascade",
     }),
     productId: uuid("product_id").references(() => productTable.id, {
-        onDelete: "no action",
+        onDelete: "set null",
     }),
     productName: varchar("product_name", {
         length: 500

@@ -14,11 +14,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  allowedDevOrigins: ['uniformed-anthology-huskiness.ngrok-free.dev'],
+  
   experimental: {
     serverActions: {
-      bodySizeLimit: "5mb"
+      bodySizeLimit: "50mb"
     }
-  }
+  },
+  
 };
 
 export default nextConfig;

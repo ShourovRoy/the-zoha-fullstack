@@ -70,6 +70,13 @@ export const relations = defineRelations(schema, (r) => ({
             from: r.usersTable.id,
             to: r.orderTable.orderUserId
         })
+    },
+
+    transactionTable: {
+        order: r.one.orderTable({
+            from: r.transactionTable.orderId,
+            to: r.orderTable.id
+        })
     }
 
 

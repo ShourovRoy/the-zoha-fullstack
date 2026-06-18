@@ -6,6 +6,7 @@ import { OrderInsert, OrderItemInsert, orderItemTable, orderTable } from "@/data
 import { productTable } from "@/database/schemas/product"
 import { usersTable } from "@/database/schemas/user"
 import { getUser } from "@/lib/auth/session"
+import { SSLCommerzePaymentNotification } from "@/lib/types/payment-notification-ssl-commerze"
 import { and, eq, gte, sql } from "drizzle-orm"
 import { updateTag } from "next/cache"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
@@ -20,6 +21,7 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
     const successUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_SUCCESS_URL
     const failedUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_FAIL_URL
     const canceledUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_CANCEL_URL
+    const ipnUrl = process.env.SSL_COMMERZE_IPN_LISTNER_ENDPOINT
 
     const formEncodedData = new FormData()
 
@@ -34,6 +36,7 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
     formEncodedData.append("product_name", productNames || "")
     formEncodedData.append("num_of_item", quantity?.toString() || "")
     formEncodedData.append("cus_name", customerName || "")
+    formEncodedData.append("ipn_url", ipnUrl || "")
 
 
     const res = await fetch(endpointUrl!, {

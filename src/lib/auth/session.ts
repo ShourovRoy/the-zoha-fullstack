@@ -40,9 +40,10 @@ export async function createSession(userId: string, role: string) {
 
     cookieStore.set('session', session, {
         httpOnly: true,
-        secure: process.env.APP_STATUS === "PRODUCTION",
+        // secure: process.env.APP_STATUS === "PRODUCTION",
+        secure: true,
         expires: expiresAt,
-        sameSite: 'lax',
+        sameSite: 'none',
         path: '/',
     })
 }
@@ -56,7 +57,6 @@ export async function deleteSession() {
 export async function getUser(isRedirectRequired: boolean = true): Promise<SessionPayload | undefined | null> {
     const cookieStore = await cookies()
     const session = cookieStore.get("session")
-    console.log("session: ++++++++++++++++++++++++ ", session)
     if ((!session || !session?.value) && isRedirectRequired) {
         redirect("/auth/login")
 
