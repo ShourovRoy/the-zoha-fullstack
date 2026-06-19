@@ -2,17 +2,18 @@ import ShippingForm from "@/components/checkout/forms/shipping-form"
 import { getCheckOutCarts } from "@/lib/data/checkout-data"
 import { getAssetUrl } from "@/lib/helpers/media"
 import Image from "next/image"
-import { ShoppingBag, Receipt, CreditCard, ArrowRight, Package } from "lucide-react"
+import { ShoppingBag, Receipt, Package } from "lucide-react"
 import SelectOrderPaymentMethodButton from "./_components/select-order-payment-method-button"
 
 const CheckoutPage = async ({
     searchParams
 }: {
     searchParams: Promise<{
-        shippingAddress?: string
+        shippingAddress?: string;
+        contactNumber?: string;
     }>
 }) => {
-    const { shippingAddress } = await searchParams;
+    const { shippingAddress, contactNumber } = await searchParams;
     const { cartItems, totalOrderItems, totalPrice, userDetails } = await getCheckOutCarts()
 
     const formatCurrency = (amount: number) => {
@@ -44,7 +45,7 @@ const CheckoutPage = async ({
                 <div className="w-full lg:col-span-7 xl:col-span-8 space-y-6">
 
                     {/* 1. Address Form Container Block */}
-                    <ShippingForm defaultAddress={userDetails?.defaultShippingAddress} />
+                    <ShippingForm defaultContactNumber={userDetails?.phoneNumber} defaultAddress={userDetails?.defaultShippingAddress} />
 
                     {/* 2. Cart Items Review Panel List */}
                     <div className="space-y-3">
@@ -130,7 +131,7 @@ const CheckoutPage = async ({
                     </div>
 
                     <div className="pt-2">
-                        <SelectOrderPaymentMethodButton shippingAddress={shippingAddress || undefined} />
+                        <SelectOrderPaymentMethodButton contactNumber={contactNumber || undefined} shippingAddress={shippingAddress || undefined} />
                     </div>
                 </div>
 

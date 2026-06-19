@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { ArrowRight, CreditCard, Banknote, Shield } from "lucide-react"
 import { sslCommerceCheckout } from "@/actions/checkout/ssl-commerce-checkout-action"
-import { useSearchParams } from "next/navigation"
 
 type PaymentType = 'COD' | 'SSL_COMMERZE'
 
-const CompactPaymentSelection = ({ shippingAddress }: {
-    shippingAddress?: string
+const CompactPaymentSelection = ({ shippingAddress, contactNumber }: {
+    shippingAddress?: string;
+    contactNumber?: string;
 }) => {
 
     const [paymentMethod, setPaymentMethod] = useState<PaymentType>('COD')
@@ -56,7 +56,7 @@ const CompactPaymentSelection = ({ shippingAddress }: {
             {/* 3. Action Processing Checkout Button */}
             <button onClick={async () => {
                 if (paymentMethod === "SSL_COMMERZE") {
-                    await sslCommerceCheckout(shippingAddress)
+                    await sslCommerceCheckout(shippingAddress, contactNumber)
                 } else {
                     return
                 }
@@ -69,7 +69,7 @@ const CompactPaymentSelection = ({ shippingAddress }: {
                 ) : (
                     <>
                         <CreditCard className="h-3.5 w-3.5 opacity-80" />
-                        <span>Pay with SSLCommerze</span>
+                        <span>Pay with SSLCommerze </span>
                     </>
                 )}
                 <ArrowRight className="h-3 w-3 ml-auto opacity-60" />

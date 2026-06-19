@@ -64,7 +64,7 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
 
 
 
-export async function sslCommerceCheckout(customShippingAddress?: string) {
+export async function sslCommerceCheckout(customShippingAddress?: string, customContactNumber?: string) {
 
     try {
 
@@ -79,6 +79,7 @@ export async function sslCommerceCheckout(customShippingAddress?: string) {
 
 
         let shippingAddress: string;
+        let contactNumber: string;
 
 
         if (customShippingAddress) {
@@ -90,6 +91,18 @@ export async function sslCommerceCheckout(customShippingAddress?: string) {
                 }
             }
             shippingAddress = userDetails.defaultShippingAddress
+        }
+
+        if (customContactNumber) {
+            contactNumber = customContactNumber
+        } else {
+            if (!userDetails?.phoneNumber) {
+                return {
+                    errorMessage: "Phone number is missing!"
+                }
+            }
+            contactNumber = userDetails.phoneNumber
+
         }
 
 
@@ -146,7 +159,7 @@ export async function sslCommerceCheckout(customShippingAddress?: string) {
                 orderPaymentMethod: "ssl_commerze_gateway",
                 orderProcessStatus: "confirming",
                 shippingAddress: shippingAddress,
-                contactNumber: "", // TODO: need to work here
+                contactNumber: contactNumber,
             }
 
 
