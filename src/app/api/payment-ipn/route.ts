@@ -39,7 +39,7 @@ export async function POST(request: Request) {
             // error handle
             await db.update(orderTable).set({
                 orderPaymentMethod: "ssl_commerze_gateway",
-                orderProcessStatus: "processing",
+                orderProcessStatus: "failed",
                 orderPaymentStatus: "due",
                 orderPaymentMessage: "Payment Failed!"
             }).where(eq(orderTable.id, paymentNotificationData.tran_id))

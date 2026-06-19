@@ -1,10 +1,10 @@
-import { s3Domain } from "@/config/media-client"
 import { getAllCategories } from "@/lib/data/category-data"
 import Image from "next/image"
 import Link from "next/link"
 import { FolderOpen, PlusCircle, AlertCircle, Eye } from "lucide-react"
 import CategorySearch from "./_components/category-search"
 import CategoryPagination from "./_components/category-pagination"
+import { getAssetUrl } from "@/lib/helpers/media"
 
 interface PageProps {
   searchParams: Promise<{
@@ -91,7 +91,7 @@ const AllCategories = async ({ searchParams }: PageProps) => {
                   <Image
                     width={400}
                     height={300}
-                    src={`${s3Domain}/${category.imageKey}`}
+                    src={getAssetUrl(category.imageKey)}
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                     priority={index < 3}
