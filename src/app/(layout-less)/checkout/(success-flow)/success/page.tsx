@@ -51,7 +51,7 @@ const CheckoutSuccessPage = async ({ searchParams }: PageProps) => {
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-4 bg-stone-50/40">
             <div className="w-full max-w-md bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm space-y-6">
-                
+
                 {/* Header Success Section */}
                 <div className="text-center space-y-2">
                     <div className="h-12 w-12 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto border border-emerald-100">
@@ -113,15 +113,16 @@ const CheckoutSuccessPage = async ({ searchParams }: PageProps) => {
 
                 {/* Structural Navigation Buttons */}
                 <div className="grid grid-cols-2 gap-3 pt-2">
-                    <Link 
-                        href="/application/dashboard" 
+                    <Link
+                        // TODO: need to work here
+                        href="/"
                         className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-stone-600 bg-white border border-stone-200 rounded-xl py-2.5 hover:bg-stone-50 active:bg-stone-100 transition-colors"
                     >
                         <ShoppingBag className="h-3.5 w-3.5" />
                         <span>My Orders</span>
                     </Link>
-                    <Link 
-                        href="/" 
+                    <Link
+                        href="/products"
                         className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-white bg-stone-900 rounded-xl py-2.5 hover:bg-stone-800 active:bg-stone-950 transition-all shadow-sm"
                     >
                         <span>Continue Shopping</span>
@@ -143,8 +144,8 @@ function InvalidAccessView({ message, isExpired = false }: { message: string, is
                     <h2 className="text-sm font-bold text-red-900">{isExpired ? "Validation Session Expired" : "Secure Protocol Violation"}</h2>
                     <p className="text-[11px] text-red-700/80 leading-relaxed max-w-70 mx-auto">{message}</p>
                 </div>
-                <Link 
-                    href="/application/dashboard" 
+                <Link
+                    href="/application/dashboard"
                     className="inline-flex text-[11px] font-bold text-red-700 underline underline-offset-4 hover:text-red-900 transition-colors"
                 >
                     Return to safe zone dashboard
