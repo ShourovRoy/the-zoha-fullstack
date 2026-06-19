@@ -82,6 +82,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                                             src={getAssetUrl(product.featuredImageKey)}
                                             alt={product.name}
                                             className="object-cover"
+                                            loading="eager"
                                         />
                                         {isOutOfStock && (
                                             <div className="absolute inset-0 bg-white/70 flex items-center justify-center">

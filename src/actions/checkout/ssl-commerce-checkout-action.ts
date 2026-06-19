@@ -6,7 +6,7 @@ import { OrderInsert, OrderItemInsert, orderItemTable, orderTable } from "@/data
 import { productTable } from "@/database/schemas/product"
 import { usersTable } from "@/database/schemas/user"
 import { getUser } from "@/lib/auth/session"
-import { SSLCommerzePaymentNotification } from "@/lib/types/payment-notification-ssl-commerze"
+import { createJwt, OrderJwtPayload } from "@/lib/helpers/jwt-helper"
 import { and, eq, gte, sql } from "drizzle-orm"
 import { updateTag } from "next/cache"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
@@ -14,14 +14,25 @@ import { redirect } from "next/navigation"
 
 
 
-const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: string | null, tranId?: string, productNames?: string, quantity?: number, customerName?: string) => {
+const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: string | null, tranId?: string, productNames?: string, quantity?: number, customerName?: string, userId?: string, shippingAddress?: string) => {
+    // create token for redirect urls
+    const redirectToken = await createJwt<OrderJwtPayload>({
+        orderId: tranId || "",
+        userId: userId || "",
+    })
+
+    const searchParams = new URLSearchParams({
+        redirectToken: redirectToken
+    })
+
     const endpointUrl = process.env.SSL_COMMERZE_SESSION_API_ENDPOINT
     const store_id = process.env.SSL_COMMERZE_STORE_ID
     const store_pwd = process.env.SSL_COMMERZE_API_SECRET_KEY
-    const successUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_SUCCESS_URL
-    const failedUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_FAIL_URL
-    const canceledUrl = process.env.NEXT_PUBLIC_SSL_COMMERZE_CANCEL_URL
+    const successUrl = `${process.env.NEXT_PUBLIC_SSL_COMMERZE_SUCCESS_URL}?${searchParams}`
+    const failedUrl = `${process.env.NEXT_PUBLIC_SSL_COMMERZE_FAIL_URL}?${searchParams}`
+    const canceledUrl = `${process.env.NEXT_PUBLIC_SSL_COMMERZE_CANCEL_URL}?${searchParams}`
     const ipnUrl = process.env.SSL_COMMERZE_IPN_LISTNER_ENDPOINT
+
 
     const formEncodedData = new FormData()
 
@@ -37,6 +48,8 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
     formEncodedData.append("num_of_item", quantity?.toString() || "")
     formEncodedData.append("cus_name", customerName || "")
     formEncodedData.append("ipn_url", ipnUrl || "")
+    formEncodedData.append("emi_option", "0")
+    formEncodedData.append("cus_add1", shippingAddress || "")
 
 
     const res = await fetch(endpointUrl!, {
@@ -51,7 +64,7 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
 
 
 
-export async function sslCommerceCheckout(customShippingAddress: string) {
+export async function sslCommerceCheckout(customShippingAddress?: string) {
 
     try {
 
@@ -132,7 +145,8 @@ export async function sslCommerceCheckout(customShippingAddress: string) {
                 orderPaymentStatus: "due",
                 orderPaymentMethod: "ssl_commerze_gateway",
                 orderProcessStatus: "confirming",
-
+                shippingAddress: shippingAddress,
+                contactNumber: "", // TODO: need to work here
             }
 
 
@@ -202,7 +216,7 @@ export async function sslCommerceCheckout(customShippingAddress: string) {
 
 
             // generate ssl commerce 
-            const gatewayRes = await getSSLCommerzePaymentSession(totalAmount, "BDT", orderRes[0].id, productNames, totalOrderItems, userDetails.firstName + " " + userDetails.lastName)
+            const gatewayRes = await getSSLCommerzePaymentSession(totalAmount, "BDT", orderRes[0].id, productNames, totalOrderItems, `${userDetails.firstName} ${userDetails.lastName}`, userDetails.id!, shippingAddress!)
 
             if (!gatewayRes || !gatewayRes?.GatewayPageURL) {
                 tx.rollback()

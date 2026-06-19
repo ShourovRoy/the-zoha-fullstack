@@ -5,7 +5,14 @@ import Image from "next/image"
 import { ShoppingBag, Receipt, CreditCard, ArrowRight, Package } from "lucide-react"
 import SelectOrderPaymentMethodButton from "./_components/select-order-payment-method-button"
 
-const CheckoutPage = async () => {
+const CheckoutPage = async ({
+    searchParams
+}: {
+    searchParams: Promise<{
+        shippingAddress?: string
+    }>
+}) => {
+    const { shippingAddress } = await searchParams;
     const { cartItems, totalOrderItems, totalPrice, userDetails } = await getCheckOutCarts()
 
     const formatCurrency = (amount: number) => {
@@ -65,6 +72,7 @@ const CheckoutPage = async () => {
                                                 className="object-cover"
                                                 alt={cartItem.products?.name || "Product image"}
                                                 sizes="64px"
+                                                loading="eager"
                                             />
                                         </div>
 
@@ -122,7 +130,7 @@ const CheckoutPage = async () => {
                     </div>
 
                     <div className="pt-2">
-                        <SelectOrderPaymentMethodButton />
+                        <SelectOrderPaymentMethodButton shippingAddress={shippingAddress || undefined} />
                     </div>
                 </div>
 

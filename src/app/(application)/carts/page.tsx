@@ -65,13 +65,13 @@ const CartPage = async () => {
                                 <div className="h-20 w-20 aspect-square rounded-xl bg-stone-50 border border-stone-100 overflow-hidden shrink-0 relative flex items-center justify-center">
                                     {imageUrl ? (
                                         <Image
-                                            loading="eager"
+                                        
                                             src={imageUrl}
                                             alt={item.products?.name || "Product preview Asset Image"}
                                             width={100}
                                             height={100}
                                             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
-                                            unoptimized // Keeps external S3 fetch pipelines unthrottled during raw sandbox debugging
+                                            loading="eager"
                                         />
                                     ) : (
                                         <ShoppingBag className="h-5 w-5 text-stone-300" />

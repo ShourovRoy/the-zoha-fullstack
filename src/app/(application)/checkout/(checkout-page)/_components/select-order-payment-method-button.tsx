@@ -3,12 +3,16 @@
 import { useState } from "react"
 import { ArrowRight, CreditCard, Banknote, Shield } from "lucide-react"
 import { sslCommerceCheckout } from "@/actions/checkout/ssl-commerce-checkout-action"
+import { useSearchParams } from "next/navigation"
 
 type PaymentType = 'COD' | 'SSL_COMMERZE'
 
-const CompactPaymentSelection = () => {
+const CompactPaymentSelection = ({ shippingAddress }: {
+    shippingAddress?: string
+}) => {
+
     const [paymentMethod, setPaymentMethod] = useState<PaymentType>('COD')
-    
+
 
     return (
         <div className="w-full space-y-3">
@@ -18,8 +22,8 @@ const CompactPaymentSelection = () => {
                     type="button"
                     onClick={() => setPaymentMethod('COD')}
                     className={`flex-1 text-center py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${paymentMethod === 'COD'
-                            ? "bg-white text-stone-900 shadow-xs"
-                            : "text-stone-500 hover:text-stone-800"
+                        ? "bg-white text-stone-900 shadow-xs"
+                        : "text-stone-500 hover:text-stone-800"
                         }`}
                 >
                     <Banknote className="h-3.5 w-3.5 shrink-0" />
@@ -30,8 +34,8 @@ const CompactPaymentSelection = () => {
                     type="button"
                     onClick={() => setPaymentMethod('SSL_COMMERZE')}
                     className={`flex-1 text-center py-2 px-3 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2 cursor-pointer ${paymentMethod === 'SSL_COMMERZE'
-                            ? "bg-white text-stone-900 shadow-xs"
-                            : "text-stone-500 hover:text-stone-800"
+                        ? "bg-white text-stone-900 shadow-xs"
+                        : "text-stone-500 hover:text-stone-800"
                         }`}
                 >
                     <CreditCard className="h-3.5 w-3.5 shrink-0" />
@@ -52,7 +56,7 @@ const CompactPaymentSelection = () => {
             {/* 3. Action Processing Checkout Button */}
             <button onClick={async () => {
                 if (paymentMethod === "SSL_COMMERZE") {
-                    await sslCommerceCheckout("some address")
+                    await sslCommerceCheckout(shippingAddress)
                 } else {
                     return
                 }

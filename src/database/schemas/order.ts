@@ -38,6 +38,12 @@ export const orderTable = pgTable("orders", {
     orderPaymentMessage: varchar("order_payment_message", { length: 200 }),
     orderProcessStatus: orderProcessStatusEnum("order_process_status").default("confirming"),
     isCompleted: boolean("is_completed").default(false),
+    shippingAddress: varchar("shipping_address", {
+        length: 3000
+    }),
+    contactNumber: varchar("contact_number", {
+        length: 22
+    }),
     ...timestamps,
 })
 

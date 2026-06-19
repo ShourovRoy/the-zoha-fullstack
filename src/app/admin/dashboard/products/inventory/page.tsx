@@ -122,6 +122,7 @@ const InventoryPage = async ({
                                                         sizes="48px"
                                                         className="object-cover"
                                                         priority={true}
+                                                        loading="eager"
                                                     />
                                                 </div>
                                             </td>

@@ -40,10 +40,10 @@ export async function createSession(userId: string, role: string) {
 
     cookieStore.set('session', session, {
         httpOnly: true,
-        // secure: process.env.APP_STATUS === "PRODUCTION",
-        secure: true,
+        secure: process.env.APP_STATUS === "PRODUCTION",
+        // secure: true,
         expires: expiresAt,
-        sameSite: 'none',
+        sameSite: 'lax',
         path: '/',
     })
 }

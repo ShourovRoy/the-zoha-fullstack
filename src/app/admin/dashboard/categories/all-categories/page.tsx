@@ -95,6 +95,7 @@ const AllCategories = async ({ searchParams }: PageProps) => {
                     alt={category.name}
                     className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300"
                     priority={index < 3}
+                    loading="eager"
                   />
                 </div>
 

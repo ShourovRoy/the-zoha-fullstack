@@ -249,7 +249,7 @@ const CreateProductForm = ({ children }: { children: ReactNode }) => {
 
           {featuredImageKeyPreview ? (
             <div className="relative w-full h-52 border border-neutral-200 rounded-lg overflow-hidden bg-neutral-50 shadow-inner group">
-              <Image src={featuredImageKeyPreview} alt="Featured display thumbnail" fill className="object-cover" />
+              <Image loading="eager" src={featuredImageKeyPreview} alt="Featured display thumbnail" fill className="object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-neutral-900/60 via-transparent to-transparent flex items-end justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <p className="text-xs text-white font-medium truncate max-w-[75%]">Primary Catalog Cover</p>
                 <button
@@ -292,7 +292,7 @@ const CreateProductForm = ({ children }: { children: ReactNode }) => {
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
             {gallaryImagesPreview.map((gallaryImage) => (
               <div key={gallaryImage.id} className="relative aspect-square border border-neutral-200 rounded-lg overflow-hidden bg-neutral-50 shadow-xs group">
-                <Image src={gallaryImage.imageUrl} alt={gallaryImage.name} fill className="object-cover" />
+                <Image loading="eager" src={gallaryImage.imageUrl} alt={gallaryImage.name} fill className="object-cover" />
                 <button
                   type="button"
                   onClick={(e) => removeGallaryImageById(e, gallaryImage.id)}
