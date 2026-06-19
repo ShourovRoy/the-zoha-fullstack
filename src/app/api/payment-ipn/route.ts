@@ -178,11 +178,7 @@ export async function POST(request: Request) {
 
                 const carts = await tx.query.cartTable.findMany({
                     with: {
-                        products: {
-                            with: {
-                                category: true
-                            }
-                        }
+                        products: true
                     },
                     where: {
                         // NOTE: value_a consist of user id set from sslcommerze checkout session
