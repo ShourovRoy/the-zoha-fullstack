@@ -50,6 +50,7 @@ const getSSLCommerzePaymentSession = async (totalAmount: number, currency?: stri
     formEncodedData.append("ipn_url", ipnUrl || "")
     formEncodedData.append("emi_option", "0")
     formEncodedData.append("cus_add1", shippingAddress || "")
+    formEncodedData.append("value_a", userId || "")
 
 
     const res = await fetch(endpointUrl!, {
@@ -195,37 +196,6 @@ export async function sslCommerceCheckout(customShippingAddress?: string, custom
             })
 
             await tx.insert(orderItemTable).values(orderItemsList)
-
-            await tx.delete(cartTable).where(eq(cartTable.userId, user?.userId!))
-
-
-            for (const cartItem of carts) {
-                if (!cartItem.productId) continue
-
-                const orderQuantity = cartItem.quantity
-
-                // update product stock quantity
-                const productQuantityUpdateRes = await tx.update(productTable).set({
-                    quantity: sql`${productTable.quantity} - ${orderQuantity}`
-                }).where(and(
-                    eq(productTable.id, cartItem.productId),
-                    gte(productTable.quantity, orderQuantity!)
-                )).returning({
-                    id: productTable.id
-                })
-
-
-                if (!productQuantityUpdateRes || productQuantityUpdateRes.length === 0) {
-                    tx.rollback()
-                    return {
-                        errorMessage: `${cartItem.products?.name!} in your cart are no longer available in the requested quantity.`
-                    }
-                }
-
-                // update product details cache by slug
-                updateTag(`productSlug-${cartItem.products?.slug!}`)
-
-            }
 
 
             // generate ssl commerce 

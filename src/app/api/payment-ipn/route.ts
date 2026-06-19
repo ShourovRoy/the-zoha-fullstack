@@ -1,8 +1,11 @@
 import { db } from "@/database/db";
+import { cartTable } from "@/database/schemas/cart";
 import { orderTable } from "@/database/schemas/order";
+import { productTable } from "@/database/schemas/product";
 import { transactionTable, TransactionValueType } from "@/database/schemas/transaction";
 import { SSLCommerzePaymentNotification, SSLCommerzValidationResponse } from "@/lib/types/payment-notification-ssl-commerze"
-import { and, eq } from "drizzle-orm";
+import { and, eq, gte, sql } from "drizzle-orm";
+import { revalidateTag, updateTag } from "next/cache";
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
@@ -54,7 +57,6 @@ export async function POST(request: Request) {
         if (validationData.status === "VALIDATED") {
             return new NextResponse("The payment already validated!", { status: 400 })
         }
-
 
         // create transaction details in db
 
@@ -110,7 +112,7 @@ export async function POST(request: Request) {
                     case "UNATTEMPTED":
                         await tx.update(orderTable).set({
                             orderPaymentMethod: "ssl_commerze_gateway",
-                            orderProcessStatus: "confirming",
+                            orderProcessStatus: "unattempted",
                             orderPaymentStatus: "due",
                             orderPaymentMessage: "Customer did not choose to pay any channel.",
                             orderPaymentChannel: paymentNotificationData.card_issuer || null,
@@ -119,7 +121,7 @@ export async function POST(request: Request) {
                     case "EXPIRED":
                         await tx.update(orderTable).set({
                             orderPaymentMethod: "ssl_commerze_gateway",
-                            orderProcessStatus: "confirming",
+                            orderProcessStatus: "expired",
                             orderPaymentStatus: "due",
                             orderPaymentMessage: "Payment Timeout.",
                             orderPaymentChannel: paymentNotificationData.card_issuer || null,
@@ -149,28 +151,82 @@ export async function POST(request: Request) {
                 return new NextResponse("There are no orders!", { status: 400 })
             }
 
+            if (paymentNotificationData.status === validationData.status) {
 
-            switch (paymentNotificationData.status) {
-                case "VALID":
-                    await tx.update(orderTable).set({
-                        orderPaymentMethod: "ssl_commerze_gateway",
-                        orderProcessStatus: "confirmed",
-                        orderPaymentStatus: "paid",
-                        orderPaymentMessage: "A successful transaction",
-                        orderPaymentChannel: paymentNotificationData.card_issuer,
-                    }).where(eq(orderTable.id, paymentNotificationData.tran_id))
-                    break
+                switch (paymentNotificationData.status) {
+                    case "VALID":
+                        await tx.update(orderTable).set({
+                            orderPaymentMethod: "ssl_commerze_gateway",
+                            orderProcessStatus: "confirmed",
+                            orderPaymentStatus: "paid",
+                            orderPaymentMessage: "A successful transaction",
+                            orderPaymentChannel: paymentNotificationData.card_issuer,
+                        }).where(eq(orderTable.id, paymentNotificationData.tran_id))
+                        break
 
 
-                default:
-                    await tx.update(orderTable).set({
-                        orderPaymentMethod: "ssl_commerze_gateway",
-                        orderProcessStatus: "error",
-                        orderPaymentStatus: "due",
-                        orderPaymentMessage: "Payment Failed!",
-                        orderPaymentChannel: paymentNotificationData.card_issuer || null,
-                    }).where(eq(orderTable.id, paymentNotificationData.tran_id))
-                    break;
+                    default:
+                        await tx.update(orderTable).set({
+                            orderPaymentMethod: "ssl_commerze_gateway",
+                            orderProcessStatus: "error",
+                            orderPaymentStatus: "due",
+                            orderPaymentMessage: "Payment Failed!",
+                            orderPaymentChannel: paymentNotificationData.card_issuer || null,
+                        }).where(eq(orderTable.id, paymentNotificationData.tran_id))
+                        break;
+                }
+
+                const carts = await tx.query.cartTable.findMany({
+                    with: {
+                        products: {
+                            with: {
+                                category: true
+                            }
+                        }
+                    },
+                    where: {
+                        // NOTE: value_a consist of user id set from sslcommerze checkout session
+                        userId: validationData.value_a
+                    }
+                })
+
+
+                for (const cartItem of carts) {
+                    if (!cartItem.productId) continue
+
+                    const orderQuantity = cartItem.quantity
+
+                    // update product stock quantity
+                    const productQuantityUpdateRes = await tx.update(productTable).set({
+                        quantity: sql`${productTable.quantity} - ${orderQuantity}`
+                    }).where(and(
+                        eq(productTable.id, cartItem.productId),
+                        gte(productTable.quantity, orderQuantity!)
+                    )).returning({
+                        id: productTable.id
+                    })
+
+
+                    if (!productQuantityUpdateRes || productQuantityUpdateRes.length === 0) {
+                        tx.rollback()
+                        return {
+                            errorMessage: `${cartItem.products?.name!} in your cart are no longer available in the requested quantity.`
+                        }
+                    }
+
+                    // update product details cache by slug
+                    revalidateTag(`productSlug-${cartItem.products?.slug!}`, "max")
+
+                }
+
+
+                // NOTE: value_a consist of user id set from sslcommerze checkout session
+                // delete the cart table 
+                await tx.delete(cartTable).where(eq(cartTable.userId, validationData.value_a))
+
+
+
+
             }
 
 

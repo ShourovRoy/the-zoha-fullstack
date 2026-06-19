@@ -1,0 +1,1 @@
+ALTER TYPE "order_process_status" ADD VALUE 'unattempted';

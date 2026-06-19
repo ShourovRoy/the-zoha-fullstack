@@ -21,7 +21,9 @@ export const orderProcessStatusEnum = pgEnum("order_process_status", [
     "confirmed",
     "failed",
     "cancelled",
-    "error"
+    "error",
+    "expired",
+    "unattempted"
 ]);
 
 export const orderTable = pgTable("orders", {
