@@ -5,7 +5,7 @@ import { productTable } from "@/database/schemas/product";
 import { transactionTable, TransactionValueType } from "@/database/schemas/transaction";
 import { SSLCommerzePaymentNotification, SSLCommerzValidationResponse } from "@/lib/types/payment-notification-ssl-commerze"
 import { and, eq, gte, sql } from "drizzle-orm";
-import { revalidateTag, updateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
