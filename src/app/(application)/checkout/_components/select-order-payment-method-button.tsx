@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { ArrowRight, CreditCard, Banknote, Shield } from "lucide-react"
 import { sslCommerceCheckout } from "@/actions/checkout/ssl-commerce-checkout-action"
+import { cashOneDeliveryCheckout } from "@/actions/checkout/cash-on-delivery-checkout-action"
+import { usePathname } from "next/navigation"
 
 type PaymentType = 'COD' | 'SSL_COMMERZE'
 
@@ -10,7 +12,7 @@ const CompactPaymentSelection = ({ shippingAddress, contactNumber }: {
     shippingAddress?: string;
     contactNumber?: string;
 }) => {
-
+    const pathname = usePathname();
     const [paymentMethod, setPaymentMethod] = useState<PaymentType>('COD')
 
 
@@ -58,7 +60,11 @@ const CompactPaymentSelection = ({ shippingAddress, contactNumber }: {
                 if (paymentMethod === "SSL_COMMERZE") {
                     await sslCommerceCheckout(shippingAddress, contactNumber)
                 } else {
-                    return
+                    await cashOneDeliveryCheckout({
+                        pathName: pathname,
+                        customPhoneNumber: contactNumber,
+                        customShippingAddress: shippingAddress,
+                    })
                 }
             }} className="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all duration-200 active:scale-[0.99] cursor-pointer">
                 {paymentMethod === 'COD' ? (
