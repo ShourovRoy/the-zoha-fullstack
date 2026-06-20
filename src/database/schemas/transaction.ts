@@ -13,9 +13,14 @@ export const transactionTable = pgTable("transactions", {
     transactionId: varchar("transaction_id", {
         length: 500
     }).unique().notNull(),
+
+    paymentMethod: varchar("payment_method", {
+        length: 100
+    }),
     cardIssuerCountry: varchar("card_issuer_country", {
         length: 255
     }),
+
     cardNo: varchar("card_no", {
         length: 100
     }),

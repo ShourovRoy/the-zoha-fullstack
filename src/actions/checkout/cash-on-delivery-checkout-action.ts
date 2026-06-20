@@ -2,10 +2,12 @@
 
 import { db } from "@/database/db";
 import { cartTable } from "@/database/schemas/cart";
-import { OrderInsert, orderTable } from "@/database/schemas/order";
+import { OrderInsert, OrderItemInsert, orderItemTable, orderTable } from "@/database/schemas/order";
 import { productTable } from "@/database/schemas/product";
+import { transactionTable, TransactionType, TransactionValueType } from "@/database/schemas/transaction";
 import { getUser, SessionPayload } from "@/lib/auth/session";
 import { createJwt, OrderJwtPayload } from "@/lib/helpers/jwt-helper";
+import { getCurrentTimeDhaka } from "@/lib/helpers/time-helper";
 import { and, eq, gte, sql } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
@@ -21,8 +23,9 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
 
 
 
+
     try {
-        let isSuccess : boolean = false
+        let isSuccess: boolean = false
         let redirectToken: string | undefined
 
         // get current user
@@ -33,7 +36,11 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
             with: {
                 carts: {
                     with: {
-                        products: true,
+                        products: {
+                            with: {
+                                category: true
+                            }
+                        },
                     }
                 },
             },
@@ -95,6 +102,7 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
         }
 
 
+
         await db.transaction(async (tx) => {
             // create the order
 
@@ -108,6 +116,9 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
 
             // remove the cart items
             await tx.delete(cartTable).where(eq(cartTable.userId, user.userId))
+
+            // order items list
+            const orderItems: OrderItemInsert[] = []
 
             // update the products quantity safely in inventory
             for (const cartItem of userDetails.carts) {
@@ -133,10 +144,30 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
                     }
                 }
 
+                // prepare order item value
+                const orderItemValue: OrderItemInsert = {
+                    productName: cartItem.products?.name!,
+                    categoryName: cartItem.products?.category?.name!,
+                    featuredImageKey: cartItem.products?.featuredImageKey!,
+                    price: cartItem.products?.price!,
+                    quantity: cartItem.quantity!,
+                    totalPrice: String(Number(cartItem.products?.price) * Number(cartItem.quantity)),
+                    orderId: orderRes.id,
+                    productId: cartItem.productId,
+                    userId: user.userId,
+                }
+
+                // push the orderItemValue in the orderItems list
+                orderItems.push(orderItemValue)
+
                 // update product details cache by slug
                 revalidateTag(`productSlug-${cartItem.products?.slug!}`, "max")
 
             }
+
+
+            // create order items in database
+            await tx.insert(orderItemTable).values(orderItems)
 
             // update the order is variable to create redirect token
             const redirectTokenRes = await createJwt<OrderJwtPayload>({
@@ -144,7 +175,28 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
                 orderId: orderRes.id,
             })
 
-           
+            const transactionValues: TransactionValueType = {
+                transactionId: orderRes.id,
+                amount: totalAmount.toString(),
+                bankTranId: null,
+                cardIssuer: null,
+                cardIssuerCountry: null,
+                cardNo: null,
+                cardType: null,
+                currency: "BDT",
+                gatewayStatus: null,
+                gatewayTransactionDate: getCurrentTimeDhaka(),
+                isValidationChecked: false,
+                orderId: orderRes.id,
+                storeAmount: totalAmount.toString(),
+                validation_id: null,
+                paymentMethod: "cash_on_delivery"
+            }
+
+            // create transaction
+            await tx.insert(transactionTable).values(transactionValues)
+
+
             redirectToken = redirectTokenRes
             isSuccess = true
 
@@ -157,9 +209,9 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
                 }
             })
 
-        
-        if(isSuccess && redirectToken) {
-             const searchParams = new URLSearchParams({
+
+        if (isSuccess && redirectToken) {
+            const searchParams = new URLSearchParams({
                 redirectToken: redirectToken
             })
 

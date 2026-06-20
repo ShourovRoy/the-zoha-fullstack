@@ -75,6 +75,7 @@ export async function POST(request: Request) {
             gatewayStatus: paymentNotificationData.status,
             amount: validationData.amount || paymentNotificationData.amount,
             storeAmount: validationData.store_amount || paymentNotificationData.store_amount,
+            paymentMethod: "ssl_commerze_gateway"
         }
 
 
