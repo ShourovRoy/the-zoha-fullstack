@@ -1,7 +1,10 @@
 import 'server-only'
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
-import { getUser } from '../auth/session'
+import { deleteSession, getUser } from '../auth/session'
 import { db } from '@/database/db'
+import { redirect } from 'next/navigation'
+import { usersTable } from '@/database/schemas/user'
+import { and, eq } from 'drizzle-orm'
 
 
 
@@ -14,7 +17,7 @@ export async function getAllIncompletedOrders() {
             errorMessage: "Please login!"
         }
 
-       
+
 
         const userOrderDetails = await db.query.usersTable.findFirst({
             with: {
@@ -49,6 +52,57 @@ export async function getAllIncompletedOrders() {
 
         return {
             userOrderDetails: null
+        }
+    }
+}
+
+
+// get all available order with confirming status admin
+export async function getAllConfirmingInCompleteAvailableOrders() {
+    try {
+        // get user 
+        const user = await getUser()
+
+        if (user?.role !== "admin") {
+            redirect("/")
+        }
+
+        const [userDetails] = await db.select().from(usersTable).where(and(eq(usersTable.id, user.userId), eq(usersTable.role, user.role))).limit(1)
+
+        if (!userDetails) {
+            // delete existing session and redirect to login
+            await deleteSession()
+        }
+
+
+        const orders = await db.query.orderTable.findMany({
+            with: {
+                orderItems: true,
+                user: true,
+            },
+            where: {
+                orderProcessStatus: {
+                    eq: "confirming"
+                }
+            },
+            orderBy: {
+                created_at: "asc"
+            }
+        })
+
+        return {
+            orders
+        }
+
+
+
+    } catch (error) {
+        if (isRedirectError(error)) {
+            throw error
+        }
+
+        return {
+            orders: []
         }
     }
 }

@@ -52,6 +52,9 @@ export async function createSession(userId: string, role: string) {
 export async function deleteSession() {
     const cookieStore = await cookies()
     cookieStore.delete('session')
+
+    redirect("/auth/login")
+
 }
 
 export async function getUser(isRedirectRequired: boolean = true): Promise<SessionPayload | undefined | null> {
