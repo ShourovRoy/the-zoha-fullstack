@@ -217,7 +217,9 @@ export async function sslCommerceCheckout(customShippingAddress?: string, custom
         })
 
         if (redirectPaymentGatewayUrl) {
-            redirect(redirectPaymentGatewayUrl!)
+            return {
+                redirectUrl: redirectPaymentGatewayUrl!
+            }
         } else {
             return {
                 errorMessage: "Unknowen error happned!"

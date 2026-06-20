@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ArrowRight, CreditCard, Banknote, Shield } from "lucide-react"
 import { sslCommerceCheckout } from "@/actions/checkout/ssl-commerce-checkout-action"
 import { cashOneDeliveryCheckout } from "@/actions/checkout/cash-on-delivery-checkout-action"
-import { usePathname } from "next/navigation"
+import { redirect, usePathname } from "next/navigation"
 
 type PaymentType = 'COD' | 'SSL_COMMERZE'
 
@@ -14,6 +14,8 @@ const CompactPaymentSelection = ({ shippingAddress, contactNumber }: {
 }) => {
     const pathname = usePathname();
     const [paymentMethod, setPaymentMethod] = useState<PaymentType>('COD')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
 
     return (
@@ -57,25 +59,59 @@ const CompactPaymentSelection = ({ shippingAddress, contactNumber }: {
 
             {/* 3. Action Processing Checkout Button */}
             <button onClick={async () => {
+                setIsLoading(true)
                 if (paymentMethod === "SSL_COMMERZE") {
-                    await sslCommerceCheckout(shippingAddress, contactNumber)
+                    const res = await sslCommerceCheckout(shippingAddress, contactNumber) as { redirectUrl?: string, errorMessage?: string } | null
+                    setIsLoading(false)
+                    if (res?.errorMessage) {
+                        setErrorMessage(res.errorMessage)
+                    }
+
+                    if (res && res.redirectUrl) {
+                        redirect(res.redirectUrl)
+                    }
                 } else {
-                    await cashOneDeliveryCheckout({
+                    const res = await cashOneDeliveryCheckout({
                         pathName: pathname,
                         customPhoneNumber: contactNumber,
                         customShippingAddress: shippingAddress,
                     })
+                    setIsLoading(false)
+                    if (res?.errorMessage) {
+                        setErrorMessage(res.errorMessage)
+                    }
+
+                    if (res?.redirectUrl) {
+                        redirect(res.redirectUrl)
+                    }
                 }
+
             }} className="w-full bg-stone-900 hover:bg-stone-800 text-white py-3 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all duration-200 active:scale-[0.99] cursor-pointer">
                 {paymentMethod === 'COD' ? (
                     <>
-                        <Banknote className="h-3.5 w-3.5 opacity-80" />
-                        <span>Place Order</span>
+                        {isLoading ? (
+                            <>
+                                Placing Order...
+                            </>
+                        ) : (
+                            <>
+                                <Banknote className="h-3.5 w-3.5 opacity-80" />
+                                <span>Place Order</span>
+                            </>
+                        )}
                     </>
                 ) : (
                     <>
-                        <CreditCard className="h-3.5 w-3.5 opacity-80" />
-                        <span>Pay with SSLCommerze </span>
+                        {isLoading ? (
+                            <>
+                                Making Connection with gateway...
+                            </>
+                        ) : (
+                            <>
+                                <CreditCard className="h-3.5 w-3.5 opacity-80" />
+                                <span>Pay with SSLCommerze </span>
+                            </>
+                        )}
                     </>
                 )}
                 <ArrowRight className="h-3 w-3 ml-auto opacity-60" />

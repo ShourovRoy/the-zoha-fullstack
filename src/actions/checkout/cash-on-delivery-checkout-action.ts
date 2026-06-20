@@ -215,7 +215,10 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
                 redirectToken: redirectToken
             })
 
-            redirect(`${pathName}/success?${searchParams}`)
+
+            return {
+                redirectUrl: `${pathName}/success?${searchParams}`
+            }
         }
 
 
