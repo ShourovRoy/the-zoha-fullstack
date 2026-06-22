@@ -61,7 +61,7 @@ export async function getAllIncompletedOrders() {
 export async function getAllConfirmingInCompleteAvailableOrders() {
     try {
         // get user 
-        const user = await getUser()
+        const user = await getUser(false)
 
         if (user?.role !== "admin") {
             redirect("/")
@@ -82,7 +82,7 @@ export async function getAllConfirmingInCompleteAvailableOrders() {
             },
             where: {
                 orderProcessStatus: {
-                    eq: "confirming"
+                    OR: ["confirming", "processing"]
                 }
             },
             orderBy: {

@@ -26,7 +26,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         { label: "All Categories", href: "/admin/dashboard/categories/all-categories/", icon: Layers },
         { label: "Upload Product", href: "/admin/dashboard/products/create-new-product/", icon: UploadCloud },
         { label: "Product Inventory", href: "/admin/dashboard/products/inventory/", icon: Boxes },
-        { label: "Available Orders", href: "/admin/dashboard/available-orders", icon: ShoppingBag, count: 5 },
+        { label: "Available Orders", href: "/admin/dashboard/available-orders/", icon: ShoppingBag, count: 5 },
         { label: "Order In Process", href: "/admin/dashboard/processing-orders", icon: Truck, count: 2 },
         { label: "Completed Orders", href: "/admin/dashboard/completed-orders", icon: CheckCircle2 },
     ]
@@ -37,7 +37,9 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             {/* 1. Mobile Top Header Bar */}
             <div className="w-full bg-white border-b border-neutral-200 p-4 flex items-center justify-between md:hidden sticky top-0 z-50">
                 <div className="text-lg font-bold tracking-tight">
-                    your<span className="text-amber-600">shop</span>
+                    <Link href="/admin/dashboard/available-orders/">
+                        your<span className="text-amber-600">shop</span>
+                    </Link>
                     <span className="text-xs font-medium text-neutral-400 ml-1 uppercase tracking-wider">Admin</span>
                 </div>
                 <button
@@ -80,8 +82,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                                 href={item.href}
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group ${isActive
-                                        ? "bg-amber-50 text-amber-900 font-semibold"
-                                        : "text-neutral-700 hover:bg-stone-50 hover:text-neutral-900"
+                                    ? "bg-amber-50 text-amber-900 font-semibold"
+                                    : "text-neutral-700 hover:bg-stone-50 hover:text-neutral-900"
                                     }`}
                             >
                                 <div className="flex items-center gap-3">

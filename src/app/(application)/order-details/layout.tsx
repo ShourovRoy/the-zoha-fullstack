@@ -1,13 +1,16 @@
 import { ReactNode } from "react"
 
-const AdminLayout = ({ children }: {
+
+const ProductDetailsLayout = ({ children }: {
     children: ReactNode
 }) => {
     return (
-        <div>
+        <div className="bg-stone-50">
+
             {children}
+
         </div>
     )
 }
 
-export default AdminLayout
+export default ProductDetailsLayout

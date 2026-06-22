@@ -4,7 +4,7 @@ import { decrypt } from "./lib/auth/session";
 
 
 // specify protected and public routes
-const protectedRoutes = ['/admin']
+const protectedRoutes = ['/admin/']
 const onlyPublicRoutes = ["/auth/login", "/auth/signup"]
 
 
@@ -39,5 +39,5 @@ export default async function proxy(req: NextRequest) {
 
 // Routes Proxy should not run on
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+    matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
 }

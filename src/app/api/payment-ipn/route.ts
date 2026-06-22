@@ -158,7 +158,7 @@ export async function POST(request: Request) {
                     case "VALID":
                         await tx.update(orderTable).set({
                             orderPaymentMethod: "ssl_commerze_gateway",
-                            orderProcessStatus: "confirmed",
+                            orderProcessStatus: "processing",
                             orderPaymentStatus: "paid",
                             orderPaymentMessage: "A successful transaction",
                             orderPaymentChannel: paymentNotificationData.card_issuer,

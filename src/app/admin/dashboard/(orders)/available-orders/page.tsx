@@ -58,15 +58,15 @@ const OrdersPage = async () => {
                                         <div className="flex flex-col items-end gap-1.5 shrink-0">
                                             {/* Process Status Pill Accent */}
                                             <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wide border ${order.orderProcessStatus === "confirming"
-                                                    ? "bg-amber-50 text-amber-700 border-amber-100"
-                                                    : "bg-stone-50 text-stone-600 border-stone-200"
+                                                ? "bg-amber-50 text-amber-700 border-amber-100"
+                                                : "bg-stone-50 text-stone-600 border-stone-200"
                                                 }`}>
                                                 {order.orderProcessStatus || "Pending"}
                                             </span>
                                             {/* Payment Status Pill Accent */}
                                             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${order.orderPaymentStatus === "paid"
-                                                    ? "bg-emerald-50 text-emerald-700"
-                                                    : "bg-red-50/60 text-red-700"
+                                                ? "bg-emerald-50 text-emerald-700"
+                                                : "bg-red-50/60 text-red-700"
                                                 }`}>
                                                 {order.orderPaymentStatus === "paid" ? "Paid" : "Due"}
                                             </span>
@@ -126,7 +126,7 @@ const OrdersPage = async () => {
                                     </div>
 
                                     <Link
-                                        href={`/application/orders/${order.id}`}
+                                        href={`/admin/dashboard/order-details/${order.id}/`}
                                         className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-700 bg-stone-50 border border-stone-200 hover:bg-stone-100 hover:text-stone-900 rounded-xl px-3 py-2 transition-colors cursor-pointer"
                                     >
                                         <Eye className="h-3.5 w-3.5" />
