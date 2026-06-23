@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useState } from "react"
+import { ReactNode, Suspense, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -16,10 +16,14 @@ import {
     X
 } from "lucide-react"
 
-const DashboardLayout = ({ children }: { children: ReactNode }) => {
+
+const DynamicLink = ({
+    setIsMobileMenuOpen
+}: {
+    setIsMobileMenuOpen: (open: boolean) => void
+}) => {
     const pathname = usePathname()
-    // Local state to track whether the mobile side-drawer is active
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
 
     const navItems = [
         { label: "Create Category", href: "/admin/dashboard/categories/create-new-category/", icon: FolderPlus },
@@ -30,6 +34,52 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
         { label: "Order In Process", href: "/admin/dashboard/processing-orders", icon: Truck, count: 2 },
         { label: "Completed Orders", href: "/admin/dashboard/completed-orders", icon: CheckCircle2 },
     ]
+
+    return (
+        <div>
+            {/* Main Navigation Links */}
+            <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+                <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 px-3 mb-2">
+                    Core Management
+                </div>
+
+                {navItems.map((item) => {
+                    const Icon = item.icon
+                    // Highlight link if active
+                    const isActive = pathname === item.href
+
+                    return (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group ${isActive
+                                ? "bg-amber-50 text-amber-900 font-semibold"
+                                : "text-neutral-700 hover:bg-stone-50 hover:text-neutral-900"
+                                }`}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Icon className={`h-4 w-4 transition-colors ${isActive ? "text-amber-600" : "text-neutral-400 group-hover:text-amber-600"
+                                    }`} />
+                                <span>{item.label}</span>
+                            </div>
+                            {item.count && (
+                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? "bg-amber-200 text-amber-900" : "bg-amber-100 text-amber-800"
+                                    }`}>
+                                    {item.count}
+                                </span>
+                            )}
+                        </Link>
+                    )
+                })}
+            </nav>
+        </div>
+    )
+}
+
+const DashboardLayout = ({ children }: { children: ReactNode }) => {
+    // Local state to track whether the mobile side-drawer is active
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     return (
         <div className="min-h-screen bg-stone-50 flex flex-col md:flex-row text-neutral-900 relative">
@@ -65,42 +115,17 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
                     </div>
                 </div>
 
-                {/* Main Navigation Links */}
-                <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 px-3 mb-2">
-                        Core Management
+                <Suspense fallback={<>
+                    <div className="p-4 space-y-1">
+                        <div className="h-8 w-3/4 bg-neutral-200 rounded animate-pulse"></div>
+                        <div className="h-8 w-1/2 bg-neutral-200 rounded animate-pulse"></div>
                     </div>
+                </>} >
+                    <DynamicLink
+                        setIsMobileMenuOpen={setIsMobileMenuOpen}
+                    />
+                </Suspense>
 
-                    {navItems.map((item) => {
-                        const Icon = item.icon
-                        // Highlight link if active
-                        const isActive = pathname === item.href
-
-                        return (
-                            <Link
-                                key={item.label}
-                                href={item.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors group ${isActive
-                                    ? "bg-amber-50 text-amber-900 font-semibold"
-                                    : "text-neutral-700 hover:bg-stone-50 hover:text-neutral-900"
-                                    }`}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Icon className={`h-4 w-4 transition-colors ${isActive ? "text-amber-600" : "text-neutral-400 group-hover:text-amber-600"
-                                        }`} />
-                                    <span>{item.label}</span>
-                                </div>
-                                {item.count && (
-                                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isActive ? "bg-amber-200 text-amber-900" : "bg-amber-100 text-amber-800"
-                                        }`}>
-                                        {item.count}
-                                    </span>
-                                )}
-                            </Link>
-                        )
-                    })}
-                </nav>
 
                 {/* Footer Controls */}
                 <div className="p-4 border-t border-neutral-100 bg-stone-50/50">
@@ -123,6 +148,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
             <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full">
                 {children}
             </main>
+
+
         </div>
     )
 }

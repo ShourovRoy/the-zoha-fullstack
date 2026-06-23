@@ -202,7 +202,7 @@ const InventoryPage = async ({
                                                         <Eye className="h-3.5 w-3.5" />
                                                     </Link>
                                                     <Link
-                                                        href={`/admin/inventory/${product.id}/edit`}
+                                                        href={`/admin/dashboard/products/inventory/product-details/${product.id}/`}
                                                         title="Edit Product Details"
                                                         className="p-1.5 bg-amber-50 hover:bg-amber-100/80 border border-amber-200/60 rounded-md text-amber-700 transition-colors"
                                                     >
