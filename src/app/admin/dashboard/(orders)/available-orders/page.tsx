@@ -28,7 +28,7 @@ const OrdersPage = async () => {
                 <div className="text-center py-16 border border-dashed border-stone-200 bg-white rounded-2xl max-w-md mx-auto space-y-2">
                     <Package className="h-8 w-8 text-stone-300 mx-auto" />
                     <h3 className="text-sm font-bold text-stone-800">No Orders Queue</h3>
-                    <p className="text-xs text-stone-400 max-w-[240px] mx-auto">There are currently no new or incoming orders awaiting confirmation details.</p>
+                    <p className="text-xs text-stone-400 max-w-60 mx-auto">There are currently no new or incoming orders awaiting confirmation details.</p>
                 </div>
             ) : (
                 /* Active Content Orders Grid Layout */
