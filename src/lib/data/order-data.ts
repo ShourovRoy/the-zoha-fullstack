@@ -83,6 +83,9 @@ export async function getAllConfirmingInCompleteAvailableOrders() {
             where: {
                 orderProcessStatus: {
                     OR: ["confirming", "processing"]
+                },
+                isCompleted: {
+                    eq: false
                 }
             },
             orderBy: {
@@ -103,6 +106,109 @@ export async function getAllConfirmingInCompleteAvailableOrders() {
 
         return {
             orders: []
+        }
+    }
+}
+
+
+// get only confiremd orders
+export async function getAllConfirmedInCompleteOrders() {
+    try {
+        // get user 
+        const user = await getUser(false)
+
+        if (user?.role !== "admin") {
+            redirect("/")
+        }
+
+        const [userDetails] = await db.select().from(usersTable).where(and(eq(usersTable.id, user.userId), eq(usersTable.role, user.role))).limit(1)
+
+        if (!userDetails) {
+            // delete existing session and redirect to login
+            await deleteSession()
+        }
+
+
+        const orders = await db.query.orderTable.findMany({
+            with: {
+                orderItems: true,
+                user: true,
+            },
+            where: {
+                orderProcessStatus: {
+                    eq: "confirmed"
+                },
+                isCompleted: {
+                    eq: false
+                }
+            },
+            orderBy: {
+                created_at: "asc"
+            }
+        })
+
+        return {
+            orders
+        }
+
+
+
+    } catch (error) {
+        if (isRedirectError(error)) {
+            throw error
+        }
+
+        return {
+            orders: []
+        }
+    }
+}
+
+
+
+// get order details
+export async function getOrderDetails(orderId: string) {
+    try {
+        const user = await getUser(true)
+
+        // get user details
+        const userDetails = await db.select().from(usersTable).where(and(eq(usersTable.id, user?.userId!), eq(usersTable.role, "admin")))
+
+        if (!userDetails) {
+            redirect("/")
+        }
+
+
+        const orderDetails = await db.query.orderTable.findFirst({
+            with: {
+                user: {
+                    columns: {
+                        password: false
+                    }
+                },
+                orderItems: true
+            },
+            where: {
+                id: {
+                    eq: orderId
+                }
+            }
+        })
+
+
+
+        return {
+            orderDetails
+        }
+
+
+    } catch (error) {
+        if (isRedirectError(error)) {
+            throw error
+        }
+
+        return {
+            errorMessage: "Something went wrong!"
         }
     }
 }

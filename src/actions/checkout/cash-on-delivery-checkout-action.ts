@@ -98,7 +98,7 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
             orderPaymentMessage: "Will delivery on delivery",
             orderPaymentMethod: "cash_on_delivery",
             orderPaymentStatus: "due",
-            orderProcessStatus: "unattempted",
+            orderProcessStatus: "confirming",
         }
 
 

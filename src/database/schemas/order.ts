@@ -74,6 +74,8 @@ export const orderItemTable = pgTable("orderItems", {
 
 
 // export select and insert type
+export type OrderProcessStatusType = (typeof orderProcessStatusEnum.enumValues)[number]
+export type OrderProcessStatusEnumType = typeof orderProcessStatusEnum
 export type Order = InferSelectModel<typeof orderTable>
 
 export type OrderInsert = InferInsertModel<typeof orderTable>

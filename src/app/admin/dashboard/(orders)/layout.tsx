@@ -1,10 +1,16 @@
-import { ReactNode } from 'react'
+import { ReactNode, Suspense } from 'react'
 
 const OrderLayout = ({ children }: {
     children: ReactNode
 }) => {
     return (
-        <div>{children}</div>
+        <div>
+
+
+            {children}
+
+
+        </div>
     )
 }
 

@@ -31,7 +31,7 @@ const DynamicLink = ({
         { label: "Upload Product", href: "/admin/dashboard/products/create-new-product/", icon: UploadCloud },
         { label: "Product Inventory", href: "/admin/dashboard/products/inventory/", icon: Boxes },
         { label: "Available Orders", href: "/admin/dashboard/available-orders/", icon: ShoppingBag, count: 5 },
-        { label: "Order In Process", href: "/admin/dashboard/processing-orders", icon: Truck, count: 2 },
+        { label: "Confirmed Orders", href: "/admin/dashboard/confirmed-orders", icon: Truck, count: 2 },
         { label: "Completed Orders", href: "/admin/dashboard/completed-orders", icon: CheckCircle2 },
     ]
 
