@@ -164,7 +164,64 @@ export async function getAllConfirmedInCompleteOrders() {
     }
 }
 
+// get all completed orders
+export async function getAllCompletedOrders() {
+    try {
 
+        const userSession = await getUser(true)
+
+        const userDetails = await db.select().from(usersTable).where(
+
+            eq(usersTable.id, userSession?.userId!)
+
+        ).limit(1)
+
+        if (!userDetails || userDetails.length === 0) {
+            await deleteSession()
+            redirect("/auth/login")
+        }
+
+        // check role 
+        if (userDetails[0].role !== "admin") {
+            redirect("/")
+        }
+
+
+        const completedOrders = await db.query.orderTable.findMany({
+            with: {
+                orderItems: true,
+                user: {
+                    columns: {
+                        password: false
+                    }
+                },
+            },
+            where: {
+                isCompleted: {
+                    eq: true
+                },
+            }
+        })
+
+        if (!completedOrders) {
+            throw Error("Unable to get completed orders!")
+        }
+
+        return {
+            completedOrders
+        }
+
+
+    } catch (error) {
+        if (isRedirectError(error)) {
+            throw error
+        }
+
+        return {
+            errorMessage: String(error) || "Something went wrong! try again"
+        }
+    }
+}
 
 // get order details
 export async function getOrderDetails(orderId: string) {

@@ -116,7 +116,7 @@ const OrderActionForm = ({ orderId, isCompleted, orderProcessStatus }: { orderId
                     </button>
                 )}
 
-                {!isCompleted && (
+                {!isCompleted && orderProcessStatus === "confirmed" && (
                     <div>
                         <button
                             onClick={() => handleCompleteOrder()}

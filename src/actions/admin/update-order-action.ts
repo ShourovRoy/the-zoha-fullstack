@@ -82,7 +82,8 @@ export async function completeAdminOrder({
 
         // update the order status
         const orderUpdateRes = await db.update(orderTable).set({
-            isCompleted: true
+            isCompleted: true,
+            orderPaymentStatus: "paid",
         }).where(and(
             eq(orderTable.id, orderId),
             and(
@@ -92,6 +93,7 @@ export async function completeAdminOrder({
         )).returning({
             id: orderTable.id
         })
+
 
         if (!orderUpdateRes || !orderUpdateRes[0]?.id) {
             throw Error("Unable to complete the order! Try again")
