@@ -1,6 +1,7 @@
+import CompleteOrderTrackerForm from "@/components/admin/complete-order-tracker-form"
 import OrderTrackerStepForm from "@/components/admin/order-tracker-step-form"
 import { getOrderTrackerDetails } from "@/lib/data/order-tracker-data"
-import { Calendar, Package, AlertCircle, Layers, CheckCircle2, CircleDot, Clock, Hash, Coins } from "lucide-react"
+import { Calendar, Package, AlertCircle, Layers, CheckCircle2, CircleDot, Clock, Hash, Coins, KeyRound } from "lucide-react"
 
 const OrderTrackingPage = async ({
     params
@@ -45,7 +46,7 @@ const OrderTrackingPage = async ({
 
             {/* ERROR BOUNDARY EXCEPTION ALERT BANNER */}
             {errorMessage && (
-                <div className="flex items-start gap-3 p-4 border border-red-200 bg-red-50/40 rounded-xl max-w-2xl mx-auto">
+                <div className="flex items-start gap-3 p-4 border border-red-200 bg-red-50/40 rounded-xl max-w-2xl">
                     <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
                     <div className="space-y-1">
                         <h4 className="text-xs font-bold text-red-800">Pipeline Sync Error</h4>
@@ -56,7 +57,7 @@ const OrderTrackingPage = async ({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-                {/* Left Column Stack: Timeline Checklist + Actions */}
+                {/* Left Column Stack: Timeline Checklist + Admin Tools Action Forms */}
                 <div className="lg:col-span-2 space-y-6">
 
                     {/* Timeline Wrapper Card */}
@@ -72,13 +73,13 @@ const OrderTrackingPage = async ({
                                 <p className="text-xs text-stone-400 max-w-xs mx-auto">This fulfillment node has been initialized. No movement transitions have been logged yet.</p>
                             </div>
                         ) : (
-                            <div className="relative pl-6 space-y-6 before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-100">
+                            <div className="relative pl-6 space-y-6 before:absolute before:left-2.75 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-100">
                                 {orderTracker?.steps?.map((step, index) => {
                                     const isLatestStep = index === orderTracker.steps!.length - 1
                                     return (
                                         <div key={index} className="relative group flex items-start justify-between gap-4">
                                             {/* Timeline Circle Bullet Node */}
-                                            <div className={`absolute left-[-21px] top-1.5 h-3 w-3 rounded-full border-2 bg-white transition-colors ${isLatestStep ? "border-stone-900 scale-110 shadow-xs" : "border-stone-200"
+                                            <div className={`absolute -left-5.25 top-1.5 h-3 w-3 rounded-full border-2 bg-white transition-colors ${isLatestStep ? "border-stone-900 scale-110 shadow-xs" : "border-stone-200"
                                                 }`} />
 
                                             <div className="space-y-1 min-w-0 flex-1">
@@ -96,8 +97,16 @@ const OrderTrackingPage = async ({
                         )}
                     </div>
 
-                    {/* Interactive Step Insertion Input Card */}
-                    <OrderTrackerStepForm trackingId={orderTrackerId} />
+                    {!orderTracker?.isCompleted && (
+                        <>
+                            {/* Interactive Step Insertion Input Card */}
+                            <OrderTrackerStepForm trackingId={orderTracker?.id!} />
+
+                            {/* Completion Clearance Verification Form */}
+                            <CompleteOrderTrackerForm trackingOrderId={orderTracker?.id!} />
+                        </>
+                    )}
+
                 </div>
 
                 {/* Right Column Stack: Context Metadata Panels */}
@@ -127,6 +136,23 @@ const OrderTrackingPage = async ({
                                     {orderTracker?.orderId || "N/A"}
                                 </span>
                             </div>
+
+                            {/* Backoffice System View: Dynamic Client Otp Dashboard Token Badge */}
+                            {orderTracker?.otpCode && (
+                                <div className="bg-amber-50/40 border border-amber-200/60 p-3.5 rounded-xl space-y-2">
+                                    <span className="text-[10px] font-bold text-amber-800 tracking-wider uppercase flex items-center gap-1">
+                                        <KeyRound className="h-3 w-3 text-amber-600" /> Administrative Bypass Key
+                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <div className="font-mono text-base font-black tracking-[0.2em] text-stone-900 bg-white border border-amber-200 px-3 py-1 rounded-lg shadow-2xs select-all">
+                                            {orderTracker.otpCode}
+                                        </div>
+                                        <span className="text-[10px] text-amber-700 font-medium leading-tight">
+                                            Complete tracking OTP code for testing or manual overrides.
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
 
                             <hr className="border-stone-100" />
 

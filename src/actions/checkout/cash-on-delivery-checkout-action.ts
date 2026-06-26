@@ -8,6 +8,7 @@ import { productTable } from "@/database/schemas/product";
 import { transactionTable, TransactionType, TransactionValueType } from "@/database/schemas/transaction";
 import { getUser, SessionPayload } from "@/lib/auth/session";
 import { createJwt, OrderJwtPayload } from "@/lib/helpers/jwt-helper";
+import { generateOrderTrackingOtp } from "@/lib/helpers/otp-helper";
 import { getCurrentTimeDhaka } from "@/lib/helpers/time-helper";
 import { and, eq, gte, sql } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
@@ -202,6 +203,7 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
                 isCompleted: false,
                 orderId: orderRes.id,
                 steps: ['In Facility'],
+                otpCode: generateOrderTrackingOtp().toString()
             })
 
 

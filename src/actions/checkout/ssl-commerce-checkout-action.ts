@@ -1,13 +1,11 @@
 'use server'
 
 import { db } from "@/database/db"
-import { cartTable } from "@/database/schemas/cart"
 import { OrderInsert, OrderItemInsert, orderItemTable, orderTable } from "@/database/schemas/order"
-import { productTable } from "@/database/schemas/product"
 import { usersTable } from "@/database/schemas/user"
 import { getUser } from "@/lib/auth/session"
 import { createJwt, OrderJwtPayload } from "@/lib/helpers/jwt-helper"
-import { and, eq, gte, sql } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { updateTag } from "next/cache"
 import { isRedirectError } from "next/dist/client/components/redirect-error"
 import { redirect } from "next/navigation"

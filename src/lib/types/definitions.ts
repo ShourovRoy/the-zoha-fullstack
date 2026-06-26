@@ -184,3 +184,29 @@ export type AddOrderTrackingStepState =
         message?: string
     }
     | undefined;
+
+
+// Complete Order Tracking Schema 
+export const CompleteOrderTrackerSchema = z.object({
+    // Validates a 4-digit string of numbers
+    otpCode: z
+        .string({ error: "OTP code is required" })
+        .length(4, { message: "OTP must be exactly 4 digits" })
+        .regex(/^\d+$/, { message: "OTP must contain only numbers" }),
+
+    // Validates a required, non-empty string tracking ID
+    orderTrackingId: z
+        .string({ error: "Invalid tracking id" })
+        .min(1, { message: "Tracking ID cannot be empty" })
+});
+
+export type CompleterderTrackingState =
+    | {
+        errors?: {
+            otpCode?: string[]
+            orderTrackingId?: string[]
+        }
+        errorMessage?: string
+        message?: string
+    }
+    | undefined;

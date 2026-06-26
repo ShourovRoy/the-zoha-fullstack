@@ -1,0 +1,1 @@
+ALTER TABLE "ordertracker" ADD COLUMN "otp_code" varchar(10);

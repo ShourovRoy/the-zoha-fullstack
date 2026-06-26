@@ -1,19 +1,10 @@
 'use client'
 
-import { addOrderTrackingStep } from "@/actions/admin/add-order-tracker-step-action"
+import { addOrderTrackingStep } from "@/actions/admin/order-tracker-action"
 import { useRouter } from "next/navigation"
 import { useActionState, useEffect, useRef } from "react"
 import { PlusCircle, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
 
-interface ActionState {
-    success?: boolean;
-    message?: string;
-    errorMessage?: string;
-    errors?: {
-        stepDesc?: string;
-        orderTrackingId?: string;
-    };
-}
 
 const OrderTrackerStepForm = ({ trackingId }: { trackingId: string }) => {
     // Declared ActionState generic configuration mapping to prevent TS engine type inference loops

@@ -10,6 +10,7 @@ export const orderTrackerTable = pgTable("ordertracker", {
     orderId: uuid("order_id").references(() => orderTable.id, {
         onDelete: "set null",
     }).unique(),
+    otpCode: varchar("otp_code", { length: 10 }),
     isCompleted: boolean("is_completed").default(false),
     steps: varchar("steps").array(),
     ...timestamps

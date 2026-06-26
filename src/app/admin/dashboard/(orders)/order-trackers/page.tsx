@@ -77,7 +77,7 @@ const OrderTrackersPage = async () => {
                                                 <span className="text-[10px] font-mono font-bold text-stone-400 uppercase tracking-wider block">ORDER REF</span>
                                                 <span
                                                     title={tracker.order?.id}
-                                                    className="font-mono text-xs font-semibold text-stone-600 select-all block truncate max-w-[120px] sm:max-w-none"
+                                                    className="font-mono text-xs font-semibold text-stone-600 select-all block truncate max-w-30 sm:max-w-none"
                                                 >
                                                     {tracker.order?.id ? `${tracker.order.id.slice(0, 8)}...${tracker.order.id.slice(-4)}` : "N/A"}
                                                 </span>

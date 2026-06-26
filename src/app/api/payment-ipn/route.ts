@@ -1,8 +1,10 @@
 import { db } from "@/database/db";
 import { cartTable } from "@/database/schemas/cart";
 import { orderTable } from "@/database/schemas/order";
+import { orderTrackerTable } from "@/database/schemas/order-tracker";
 import { productTable } from "@/database/schemas/product";
 import { transactionTable, TransactionValueType } from "@/database/schemas/transaction";
+import { generateOrderTrackingOtp } from "@/lib/helpers/otp-helper";
 import { SSLCommerzePaymentNotification, SSLCommerzValidationResponse } from "@/lib/types/payment-notification-ssl-commerze"
 import { and, eq, gte, sql } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
@@ -221,6 +223,14 @@ export async function POST(request: Request) {
                 // delete the cart table 
                 await tx.delete(cartTable).where(eq(cartTable.userId, validationData.value_a))
 
+
+                // create the order tracking
+                await tx.insert(orderTrackerTable).values({
+                    isCompleted: false,
+                    orderId: paymentNotificationData.tran_id,
+                    steps: ['In Facility'],
+                    otpCode: generateOrderTrackingOtp().toString()
+                })
 
 
 
