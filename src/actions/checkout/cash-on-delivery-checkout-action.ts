@@ -3,6 +3,7 @@
 import { db } from "@/database/db";
 import { cartTable } from "@/database/schemas/cart";
 import { OrderInsert, OrderItemInsert, orderItemTable, orderTable } from "@/database/schemas/order";
+import { orderTrackerTable } from "@/database/schemas/order-tracker";
 import { productTable } from "@/database/schemas/product";
 import { transactionTable, TransactionType, TransactionValueType } from "@/database/schemas/transaction";
 import { getUser, SessionPayload } from "@/lib/auth/session";
@@ -195,6 +196,13 @@ export async function cashOneDeliveryCheckout({ pathName, customPhoneNumber, cus
 
             // create transaction
             await tx.insert(transactionTable).values(transactionValues)
+
+            // create order tracking
+            await tx.insert(orderTrackerTable).values({
+                isCompleted: false,
+                orderId: orderRes.id,
+                steps: ['In Facility'],
+            })
 
 
             redirectToken = redirectTokenRes

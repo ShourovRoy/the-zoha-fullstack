@@ -166,3 +166,21 @@ export type addRemoveCartState =
         message?: string
     }
     | undefined;
+
+
+// order tracking step desc schema
+export const AddOrderTrackingStepSchema = z.object({
+    stepDesc: z.string({ error: "Please write characters only!" }).min(2, { error: "Min character 2!" }).max(255, { error: "Max characters 255 only!" }),
+    orderTrackingId: z.string({ error: "Invalid tracking id" }).nonempty().nonoptional()
+})
+
+export type AddOrderTrackingStepState =
+    | {
+        errors?: {
+            stepDesc?: string[]
+            orderTrackingId?: string[]
+        }
+        errorMessage?: string
+        message?: string
+    }
+    | undefined;

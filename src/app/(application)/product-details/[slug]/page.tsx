@@ -3,6 +3,7 @@ import ProductImageGallary from '../_components/product-image-gallary'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import AddToCartBtn from '../_components/add-to-cart-button'
+import { formatPriceInBdt } from '@/lib/helpers/currency-helper'
 
 const ProductSlugDetailsPage = async ({
     params
@@ -30,12 +31,7 @@ const ProductSlugDetailsPage = async ({
     const isOutOfStock = (productDetails.quantity ?? 0) <= 0;
 
     // Formatting currency for local display framework format guidelines
-    const formattedPrice = new Intl.NumberFormat('bn-BD', {
-        style: 'currency',
-        currency: 'BDT',
-        currencyDisplay: 'symbol',
-        minimumFractionDigits: 0,
-    }).format(parseFloat(productDetails.price || "0"));
+    const formattedPrice = formatPriceInBdt(productDetails.price)
 
     return (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 md:py-10">

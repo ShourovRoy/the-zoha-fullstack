@@ -55,6 +55,10 @@ export const relations = defineRelations(schema, (r) => ({
         user: r.one.usersTable({
             from: r.orderTable.orderUserId,
             to: r.usersTable.id
+        }),
+        orderTracker: r.one.orderTrackerTable({
+            from: r.orderTable.id,
+            to: r.orderTrackerTable.orderId
         })
     },
 
@@ -83,6 +87,13 @@ export const relations = defineRelations(schema, (r) => ({
     transactionTable: {
         order: r.one.orderTable({
             from: r.transactionTable.orderId,
+            to: r.orderTable.id
+        })
+    },
+
+    orderTrackerTable: {
+        order: r.one.orderTable({
+            from: r.orderTrackerTable.orderId,
             to: r.orderTable.id
         })
     }

@@ -1,10 +1,11 @@
 import { getAllProducts } from '@/lib/data/product-data'
 import Image from "next/image"
 import Link from "next/link"
-import { Eye, ShoppingBag } from "lucide-react"
+import { Eye } from "lucide-react"
 import ProductPagination from './_components/product-pagination'
 import ProductSearch from './_components/product-search'
 import AddToBagButton from './_components/add-to-bag-button'
+import { formatPriceInBdt } from '@/lib/helpers/currency-helper'
 
 const getAssetUrl = (key: string) => {
     if (!key) return "";
@@ -60,12 +61,7 @@ const ProductsPage = async ({ searchParams }: PageProps) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                         {products.map((product) => {
                             // Formatted for Bangladeshi Taka standard presentation (Whole numbers)
-                            const formattedPrice = new Intl.NumberFormat('bn-BD', {
-                                style: 'currency',
-                                currency: 'BDT',
-                                currencyDisplay: 'symbol',
-                                minimumFractionDigits: 2,
-                            }).format(parseFloat(product.price))
+                            const formattedPrice = formatPriceInBdt(product.price)
 
                             const isOutOfStock = (product.quantity ?? 0) <= 0
 

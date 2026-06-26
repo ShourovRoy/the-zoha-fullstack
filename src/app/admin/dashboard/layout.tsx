@@ -13,7 +13,7 @@ import {
     CheckCircle2,
     LogOut,
     Menu,
-    X
+    X, LocateIcon
 } from "lucide-react"
 
 
@@ -33,6 +33,8 @@ const DynamicLink = ({
         { label: "Available Orders", href: "/admin/dashboard/available-orders/", icon: ShoppingBag, count: 5 },
         { label: "Confirmed Orders", href: "/admin/dashboard/confirmed-orders/", icon: Truck, count: 2 },
         { label: "Completed Orders", href: "/admin/dashboard/completed-orders/", icon: CheckCircle2 },
+
+        { label: "All Trackers", href: "/admin/dashboard/order-trackers/", icon: LocateIcon },
     ]
 
     return (

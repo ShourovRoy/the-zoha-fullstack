@@ -1,4 +1,3 @@
-
 import { pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { timestamps } from "../helpers/columns.helpers";
 import { InferInsertModel, InferSelectModel } from "drizzle-orm";
